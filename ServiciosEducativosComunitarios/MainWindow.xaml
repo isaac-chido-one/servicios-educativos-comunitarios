@@ -6,7 +6,20 @@
         xmlns:local="clr-namespace:ServiciosEducativosComunitarios"
         mc:Ignorable="d"
         Title="Control de Servicios Educativos Comunitarios del Estado de Zacatecas" Height="450" Width="800">
-    <Grid>
-
-    </Grid>
+    <DockPanel>
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="Localidades INEGI">
+                <MenuItem Header="Nuevo ..."></MenuItem>
+                <MenuItem Header="Editar ..."></MenuItem>
+                <MenuItem Header="Exportar ..."></MenuItem>
+                <MenuItem Header="Eliminar"></MenuItem>
+            </MenuItem>
+            <MenuItem Header="Servicios educativos">
+                <MenuItem Header="Nuevo ..."></MenuItem>
+                <MenuItem Header="Editar ..."></MenuItem>
+                <MenuItem Header="Exportar ..."></MenuItem>
+                <MenuItem Header="Eliminar"></MenuItem>
+            </MenuItem>
+        </Menu>
+    </DockPanel>
 </Window>
