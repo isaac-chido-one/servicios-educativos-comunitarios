@@ -9,7 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace ServiciosEducativosComunitarios
+namespace ServiciosEducativosComunitarios.View
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -19,6 +19,11 @@ namespace ServiciosEducativosComunitarios
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void MenuNewLocalityClick(object sender, RoutedEventArgs e)
+        {
+            MessageBox.Show("OK");
         }
     }
 }
