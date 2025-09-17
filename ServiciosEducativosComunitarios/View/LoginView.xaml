@@ -1,0 +1,41 @@
+﻿<Window x:Class="ServiciosEducativosComunitarios.View.LoginView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ServiciosEducativosComunitarios.View"
+        mc:Ignorable="d"
+        Title="Iniciar sesión" 
+        Height="220" 
+        Width="400"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="CanResize"
+>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="2*"></RowDefinition>
+            <RowDefinition Height="1*"></RowDefinition>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+                <ColumnDefinition Width="3*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*"></RowDefinition>
+                <RowDefinition Height="1*"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Usuario"></Label>
+            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Contraseña"></Label>
+
+            <TextBox Grid.Column="1" Grid.Row="0" VerticalAlignment="Center" Margin="0,0,20,0" MaxLines="1" Name="TxtUser"></TextBox>
+            <PasswordBox Grid.Column="1" Grid.Row="1" VerticalAlignment="Center" Margin="0,0,20,0" PasswordChar="•" Name="TxtPass"></PasswordBox>
+        </Grid>
+
+        <WrapPanel Grid.Row="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Margin="10" Padding="10" Name="BtnCancel" Click="BtnCancel_Click">Cancelar</Button>
+            <Button Margin="10" Padding="10" Name="BtnLogin" Click="BtnLogin_Click">Login</Button>
+        </WrapPanel>
+    </Grid>
+</Window>

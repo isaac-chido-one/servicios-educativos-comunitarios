@@ -15,13 +15,25 @@ using System.Windows.Shapes;
 namespace ServiciosEducativosComunitarios.View
 {
     /// <summary>
-    /// Lógica de interacción para Window1.xaml
+    /// Lógica de interacción para LoginView.xaml
     /// </summary>
-    public partial class Locality : Window
+    public partial class LoginView : Window
     {
-        public Locality()
+        public LoginView()
         {
             InitializeComponent();
+        }
+
+        private void BtnLogin_Click(object sender, RoutedEventArgs e)
+        {
+            AppView appView = new AppView();
+            appView.Show();
+            this.Close();
+        }
+
+        private void BtnCancel_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
