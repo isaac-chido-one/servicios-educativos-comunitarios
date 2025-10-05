@@ -4,34 +4,249 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiciosEducativosComunitarios.View"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="Control de Servicios Educativos Comunitarios del Estado de Zacatecas" 
-        Height="450" 
-        Width="800"
+        Title="Servicios Educativos Comunitarios" Height="700"  Width="1300"
         WindowStartupLocation="CenterScreen"
- >
-    <DockPanel>
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True">
+
+    <Border CornerRadius="10" BorderThickness="1">
+
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                <GradientStop Color="{StaticResource winBorderColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource winBorderColor2}" Offset="0.75"/>
+                <GradientStop Color="{StaticResource winBorderColor3}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <!-- Navigation Menu -->
+                <ColumnDefinition Width="250"/>
+                <!-- Content section -->
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Navegation Menu -->
+            <Border CornerRadius="10,0,0,10"
+                    Grid.Column="0">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0.7">
+                        <GradientStop Color="{StaticResource secondaryBackColor1}" Offset="0"/>
+                        <GradientStop Color="{StaticResource secondaryBackColor2}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <StackPanel>
+                    <!-- Logo -->
+                    <StackPanel Orientation="Horizontal" Height="35" Margin="15,25,0,40">
+                        <fa:IconImage Icon="UserCircle"  Foreground="{StaticResource color2}" />
+                        <!-- <Image Source="/img/user.png" Height="32"/> -->
+                        <TextBlock Text="Servicios Educativos" 
+                                   Foreground="{StaticResource titleColor2}"
+                                   FontSize="20"
+                                   FontFamily="Montserrat"
+                                   VerticalAlignment="Center" Margin="10,0,0,0" />
+                    </StackPanel>
+                    
+                    <!-- Menu Buttons -->
+
+                    <RadioButton Style="{StaticResource menuButton}"
+                                 Tag="{StaticResource color1}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Home" Style="{StaticResource menuButtonText}"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource menuButton}"
+                                Tag="{StaticResource color3}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Map" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Localidades INEGI" Style="{StaticResource menuButtonText}"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource color4}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="GraduationCap" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Servicios Educativos" Style="{StaticResource menuButtonText}"/>
+                        </StackPanel>
+                    </RadioButton>
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource color6}">
+                        <StackPanel Orientation="Horizontal">
+                            <fa:IconImage Icon="Bell" Style="{StaticResource menuButtonIcon}"/>
+                            <TextBlock Text="Avisos" Style="{StaticResource menuButtonText}"/>
+                        </StackPanel>
+                    </RadioButton>
+
+                </StackPanel>
+                
+            </Border>
+            
+            <!-- Main Section -->
+            <Border CornerRadius="0,10,10,0"
+        Grid.Column="1">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
+                        <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
+                        <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1"/>
+                    </LinearGradientBrush>
+                </Border.Background>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <!-- Control Bar -->
+                        <RowDefinition Height="25"/>
+                        <!--Header / Caption-->
+                        <RowDefinition Height="35"/>
+                        <!--Content section / Child viwes-->
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!-- Control Bar -->
+                    <StackPanel x:Name="pnlControlBar" Grid.Row="0"
+                                Orientation="Horizontal"
+                                FlowDirection="RightToLeft"
+                                Background="Transparent"
+                                Margin="0,0,5,0"
+                                MouseLeftButtonDown="pnlControlBar_MouseLeftDown"
+                                MouseEnter="pnlControlBar_MouseEnter">
+                        <Button x:Name="btnClose"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color4}"
+                                Click="btnClose_Click">
+                            <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+
+                        <Button x:Name="btnMaximize"
+                                Style="{StaticResource controlButton}"
+                                 Tag="{StaticResource color5}"
+                                 Click="btnMaximize_Click">
+                            <fa:IconImage Icon="Square" Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+
+                        <Button x:Name="btnMinimize"
+                                Style="{StaticResource controlButton}"
+                                Tag="{StaticResource color6}"
+                                Click="btnMinimize_Click">
+                            <fa:IconImage Icon="WindowMinimize" Style="{StaticResource controlButtonIcon}"/>
+                        </Button>
+                    </StackPanel>
+
+                    <!--Header / Caption-->
+                    <Grid Grid.Row="1">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!--Caption-->
+                        <StackPanel Grid.Column="0" 
+                                    Orientation="Horizontal"
+                                    VerticalAlignment="Center">
+                            
+                            <fa:IconImage Icon="Home" Height="20"
+                                          Width="20"
+                                          Foreground="{StaticResource titleColor2}"
+                                          Margin="35,0,10,0"/>
+                            <TextBlock Text="Home" Foreground="{StaticResource titleColor2}"
+                                       FontSize="16"
+                                       FontFamily="Monterrat"
+                                       FontWeight="Light"
+                                       VerticalAlignment="Center"/>
+                        </StackPanel>
+                        
+                        <!-- User Options -->
+                        <StackPanel Grid.Column="1"
+                                    Orientation="Horizontal"
+                                    FlowDirection="RightToLeft"
+                                    VerticalAlignment="Center"
+                                    Margin="0,0,10,0">
+                            <Button Style="{StaticResource iconButton}"
+                                    Tag="{StaticResource color1}">
+                                <fa:IconImage Icon="AngleDown" 
+                                              Height="12" Width="12"
+                                              Style="{StaticResource iconButtonIcon}"/>
+                            </Button>
+                            <!--Falta agegar la funcionalidad para vincular el username-->
+                            <TextBlock Text="UserName " Foreground="{StaticResource titleColor3}"
+                                       FontFamily="Montserrat"
+                                       FontSize="12"
+                                       VerticalAlignment="Center"
+                                       Padding="10,0,10,0"/>
+                            <Ellipse Height="35" Width="35"
+                                     Stroke="{StaticResource color2}"
+                                     StrokeThickness="2"
+                                     Margin="10,0,10,0">
+                                <!--<Ellipse.Fill>
+                                        <ImageBrush ImageSource=""/>
+                                </Ellipse.Fill>-->
+                            </Ellipse>
+
+                            <Button Style="{StaticResource iconButton}"
+                                    Tag="{StaticResource color3}">
+                                <fa:IconImage Icon="Clock" Style="{StaticResource iconButtonIcon}"
+                                              Margin="5,0,5,0"/>
+                            </Button>
+
+                            <Button Style="{StaticResource iconButton}"
+                                    Tag="{StaticResource color4}">
+                                <fa:IconImage Icon="Envelope" Style="{StaticResource iconButtonIcon}"
+                                              Margin="5,0,5,0"/>
+                            </Button>
+
+                            <Button Style="{StaticResource iconButton}"
+                                    Tag="{StaticResource color5}">
+                                <fa:IconImage Icon="Bell" Style="{StaticResource iconButtonIcon}"
+                                             Margin="5,0,5,0"/>
+                            </Button>
+
+                        </StackPanel>
+                    </Grid>
+
+                    <!--Content section / Child viwes-->
+                    <ContentControl Content=""
+                                    Grid.Row="2"
+                                    Margin="25"/>
+
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+
+
+
+
+
+
+
+
+
+
+
+
+    <!-- <DockPanel>
         <Menu DockPanel.Dock="Top">
             <MenuItem Header="Localidades INEGI">
-                <MenuItem Header="Ver" IsEnabled="False"></MenuItem>
-                <MenuItem Header="Nuevo ..." Name="MenuNewLocality" Click="MenuNewLocality_Click"></MenuItem>
-                <MenuItem Header="Editar ..." IsEnabled="False"></MenuItem>
+                <MenuItem Header="Ver" IsEnabled="False" />
+                <MenuItem Header="Nuevo ..." Name="MenuNewLocality" Click="MenuNewLocality_Click" />
+                <MenuItem Header="Editar ..." IsEnabled="False" />
                 <MenuItem Header="Exportar" IsEnabled="False">
-                    <MenuItem Header="Excel" IsEnabled="False"></MenuItem>
-                    <MenuItem Header="PDF" IsEnabled="False"></MenuItem>
+                    <MenuItem Header="Excel" IsEnabled="False" />
+                    <MenuItem Header="PDF" IsEnabled="False" />
                 </MenuItem>
-                <MenuItem Header="Eliminar" IsEnabled="False"></MenuItem>
+                <MenuItem Header="Eliminar" IsEnabled="False" />
             </MenuItem>
             <MenuItem Header="Servicios educativos">
-                <MenuItem Header="Ver" IsEnabled="False"></MenuItem>
-                <MenuItem Header="Nuevo ..." Name="MenuNewService" Click="MenuNewService_Click"></MenuItem>
-                <MenuItem Header="Editar ..." IsEnabled="False"></MenuItem>
+                <MenuItem Header="Ver" IsEnabled="False" />
+                <MenuItem Header="Nuevo ..." Name="MenuNewService" Click="MenuNewService_Click" />
+                <MenuItem Header="Editar ..." IsEnabled="False" />
                 <MenuItem Header="Exportar" IsEnabled="False">
-                    <MenuItem Header="Excel" IsEnabled="False"></MenuItem>
-                    <MenuItem Header="PDF" IsEnabled="False"></MenuItem>
+                    <MenuItem Header="Excel" IsEnabled="False" />
+                    <MenuItem Header="PDF" IsEnabled="False" />
                 </MenuItem>
-                <MenuItem Header="Eliminar" IsEnabled="False"></MenuItem>
+                <MenuItem Header="Eliminar" IsEnabled="False" />
             </MenuItem>
         </Menu>
-    </DockPanel>
+    </DockPanel> -->
 </Window>
