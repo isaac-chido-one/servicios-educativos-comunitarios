@@ -1,4 +1,7 @@
-﻿using ServiciosEducativosComunitarios.Model;
+﻿using Microsoft.Win32;
+using ServiciosEducativosComunitarios.Model;
+using ServiciosEducativosComunitarios.Repositories;
+using ServiciosEducativosComunitarios.View;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,6 +9,7 @@ using System.Security;
 using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ServiciosEducativosComunitarios.ViewModel
@@ -91,6 +95,22 @@ namespace ServiciosEducativosComunitarios.ViewModel
             {
                 Thread.CurrentPrincipal = new GenericPrincipal(new GenericIdentity(Username), null);
                 IsViewVisible = false;
+
+                // Crear nueva ventana
+                AppView appView = new AppView();
+                // Asignarla como ventana principal
+                Application.Current.MainWindow = appView;
+                // Mostrarla
+                appView.Show();
+                // Cerrar la anterior (login)
+                foreach (Window window in Application.Current.Windows)
+                {
+                    if (window != appView)
+                    {
+                        window.Close();
+                        break;
+                    }
+                }
             }
             else
             {

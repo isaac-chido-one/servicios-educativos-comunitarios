@@ -14,9 +14,11 @@
     <Window.DataContext>
         <viewModel:LoginViewModel></viewModel:LoginViewModel>
     </Window.DataContext>
+   
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibility"></BooleanToVisibilityConverter>
     </Window.Resources>
+    
     <Window.Visibility>
         <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"></Binding>
     </Window.Visibility>
@@ -193,8 +195,7 @@
                             FontFamily="Montserrat"
                             Cursor=""
                             Grid.Column="2"
-                            Margin="0,50,0,0"
-                            Click="BtnLogin_Click">
+                            Margin="0,50,0,0">
                         <Button.Style>
                             <Style TargetType="Button">
                                 <Setter Property="Background" Value="#0077C8"/>

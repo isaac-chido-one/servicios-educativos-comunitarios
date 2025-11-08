@@ -13,11 +13,10 @@ namespace ServiciosEducativosComunitarios.Model
 
         void Add(UserModel userModel);
 
-        void Edit(UserModel userModel);
+        public void Update(UserModel userModel);
 
-        void Remove(string username);
+        void Delete(UserModel userModel);
 
         UserModel GetByUsername(string username);
-
     }
 }

@@ -5,12 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiciosEducativosComunitarios.View"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+        xmlns:conv="clr-namespace:ServiciosEducativosComunitarios.Converters"
         mc:Ignorable="d"
         Title="Servicios Educativos Comunitarios" Height="700"  Width="1300"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         Background="Transparent"
         AllowsTransparency="True">
+
+    <Window.Resources>
+        <conv:IdToNameConverter x:Key="IdToNameConverter"/>
+    </Window.Resources>
 
     <Border CornerRadius="10" BorderThickness="1">
 
@@ -55,26 +60,39 @@
                     <!-- Menu Buttons -->
 
                     <RadioButton Style="{StaticResource menuButton}"
-                                 Tag="{StaticResource color1}">
+                                 Name="RadioButtonHome"
+                                 Checked="RadioButtonHome_Checked"
+                                 Tag="{StaticResource color1}"
+                    >
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Home" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Home" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
                     <RadioButton Style="{StaticResource menuButton}"
+                                 Name="RadioButtonLocalities"
+                                 Checked="RadioButtonLocalities_Checked"
+                                 GroupName="GroupPanels"
                                 Tag="{StaticResource color3}">
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Map" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Localidades INEGI" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource color4}">
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource color4}"
+                                 Name="RadioButtonServices"
+                                 Checked="RadioButtonServices_Checked"
+                                 GroupName="GroupPanels"
+                                 >
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="GraduationCap" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Servicios Educativos" Style="{StaticResource menuButtonText}"/>
                         </StackPanel>
                     </RadioButton>
-                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource color6}">
+                    <RadioButton Style="{StaticResource menuButton}" Tag="{StaticResource color6}"
+                                 Name="RadioButtonNotifications"
+                                 Click="RadioButtonNotifications_Click"
+                                 >
                         <StackPanel Orientation="Horizontal">
                             <fa:IconImage Icon="Bell" Style="{StaticResource menuButtonIcon}"/>
                             <TextBlock Text="Avisos" Style="{StaticResource menuButtonText}"/>
@@ -207,7 +225,101 @@
                     <!--Content section / Child viwes-->
                     <ContentControl Content=""
                                     Grid.Row="2"
+                                    Name="ContentControlMain"
                                     Margin="25"/>
+                    
+                    <Grid Grid.Row="2" Name="GridLocalities" Visibility="Hidden">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"></RowDefinition>
+                            <RowDefinition Height="11*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <WrapPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button Margin="10 0" Padding="20 10" Name="ButtonNewLocality" Click="ButtonNewLocality_Click">Nuevo</Button>
+                        </WrapPanel>
+                        
+                        <DataGrid 
+                            AutoGenerateColumns="False"
+                            Grid.Column="0" 
+                            Grid.Row="1" 
+                            Name="DataGridLocalities"
+                        >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Clave" Binding="{Binding Code}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Municipio">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Municipio, Converter={StaticResource IdToNameConverter}, ConverterParameter=Municipio}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Comunidad" Binding="{Binding Comunidad}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Ámbito">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Ambito, Converter={StaticResource IdToNameConverter}, ConverterParameter=Ambito}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Latitud" Binding="{Binding Latitud}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Longitud" Binding="{Binding Longitud}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Población" Binding="{Binding Poblacion}"></DataGridTextColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+
+                    <Grid Grid.Row="2" Name="GridServices" Visibility="Hidden">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="1*"></RowDefinition>
+                            <RowDefinition Height="11*"></RowDefinition>
+                        </Grid.RowDefinitions>
+
+                        <WrapPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <Button Margin="10 0" Padding="20 10" Name="ButtonNewService" Click="ButtonNewService_Click">Nuevo</Button>
+                        </WrapPanel>
+
+                        <DataGrid 
+                            AutoGenerateColumns="False"
+                            Grid.Column="0" 
+                            Grid.Row="1" 
+                            Name="DataGridServices"
+                        >
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Clave" Binding="{Binding Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Localidad" Binding="{Binding Locality}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="Periodo">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Period, Converter={StaticResource IdToNameConverter}, ConverterParameter=Period}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Programa">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Program, Converter={StaticResource IdToNameConverter}, ConverterParameter=Program}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="Estatus">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <TextBlock Text="{Binding Status, Converter={StaticResource IdToNameConverter}, ConverterParameter=Status}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+
+
 
                 </Grid>
             </Border>

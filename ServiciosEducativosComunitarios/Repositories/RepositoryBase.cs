@@ -18,7 +18,7 @@ namespace ServiciosEducativosComunitarios.Repositories
 
         protected SqlConnection GetConnection()
         {
-            return new SqlConnection( _connectionString );
+            return new SqlConnection(_connectionString);
         }
     }
 }

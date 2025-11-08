@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ServiciosEducativosComunitarios.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,14 +20,33 @@ namespace ServiciosEducativosComunitarios.View
     /// </summary>
     public partial class LocalityView : Window
     {
-        public LocalityView()
+        private readonly AppView appView;
+        public LocalityView(AppView appView)
         {
+            this.appView = appView;
             InitializeComponent();
+        }
+
+        public void ResetForm()
+        {
+            this.TxtCode.Text = string.Empty;
+            this.ComboMunicipio.SelectedIndex = 0;
+            this.TxtName.Text = string.Empty;
+            this.ComboScope.SelectedIndex = 0;
+            this.TxtLatitude.Text = string.Empty;
+            this.TxtLongitude.Text = string.Empty;
+            this.TxtPopulation.Text = "0";
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.Visibility = Visibility.Collapsed;
+        }
+
+        private void BtnStore_Click(object sender, RoutedEventArgs e)
+        {
+            this.Visibility = Visibility.Collapsed;
+            appView.loadCatalogues(true);
         }
     }
 }
