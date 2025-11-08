@@ -21,14 +21,18 @@ namespace ServiciosEducativosComunitarios.View
     public partial class LocalityView : Window
     {
         private readonly AppView appView;
+
+        private LocalityModel? localityModel;
+
         public LocalityView(AppView appView)
         {
             this.appView = appView;
             InitializeComponent();
         }
 
-        public void ResetForm()
+        private void ResetForm()
         {
+            this.TxtId.Text = "0";
             this.TxtCode.Text = string.Empty;
             this.ComboMunicipio.SelectedIndex = 0;
             this.TxtName.Text = string.Empty;
@@ -47,6 +51,32 @@ namespace ServiciosEducativosComunitarios.View
         {
             this.Visibility = Visibility.Collapsed;
             appView.loadCatalogues(true);
+        }
+
+        public void ShowNew()
+        {
+            this.ResetForm();
+            this.localityModel = null;
+            this.BtnCreate.Visibility = Visibility.Visible;
+            this.BtnUpdate.Visibility = Visibility.Collapsed;
+            this.Show();
+        }
+
+        public void ShowEdit(LocalityModel localityModel)
+        {
+            this.ResetForm();
+            this.localityModel = localityModel;
+            this.TxtId.Text = localityModel.Id.ToString();
+            this.TxtCode.Text = localityModel.Code;
+            this.ComboMunicipio.SelectedValue = localityModel.Municipio;
+            this.TxtName.Text = localityModel.Comunidad;
+            this.ComboScope.SelectedValue = localityModel.Ambito;
+            this.TxtLatitude.Text = localityModel.Latitud;
+            this.TxtLongitude.Text = localityModel.Longitud;
+            this.TxtPopulation.Text = localityModel.Poblacion.ToString();
+            this.BtnCreate.Visibility = Visibility.Collapsed;
+            this.BtnUpdate.Visibility = Visibility.Visible;
+            this.Show();
         }
     }
 }

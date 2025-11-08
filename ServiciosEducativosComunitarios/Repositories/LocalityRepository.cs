@@ -52,7 +52,7 @@ namespace ServiciosEducativosComunitarios.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "UPDATE [Locality] SET  [code]=@Code, [municipio]=@Municipio, [comunidad]=@Comunidad, [ambito]=@Ambito, [latitud]=@Latitud, [longitud]=@Longitud, [poblacion]=@Poblacion WHERE [id]=@Id";
+                command.CommandText = "UPDATE [Locality] SET [code]=@Code, [municipio]=@Municipio, [comunidad]=@Comunidad, [ambito]=@Ambito, [latitud]=@Latitud, [longitud]=@Longitud, [poblacion]=@Poblacion WHERE [id]=@Id";
                 command.Parameters.AddWithValue("@Code", localityModel.Code);
                 command.Parameters.AddWithValue("@Municipio", localityModel.Municipio);
                 command.Parameters.AddWithValue("@Comunidad", localityModel.Comunidad);

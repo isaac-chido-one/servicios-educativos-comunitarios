@@ -47,6 +47,41 @@ namespace ServiciosEducativosComunitarios.ViewModel
             _service = new ServiceModel();
         }
 
+        private bool validate()
+        {
+            if (string.IsNullOrEmpty(Service.Code))
+            {
+                MessageBox.Show("Ingresa una clave", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Service.LocalityId == 0)
+            {
+                MessageBox.Show("Selecciona una localidad", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Service.Program == 0)
+            {
+                MessageBox.Show("Selecciona un programa", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Service.Period == 0)
+            {
+                MessageBox.Show("Selecciona un ciclo escolar", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Service.Status == 0)
+            {
+                MessageBox.Show("Selecciona un status", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
         public ICommand AddCommand
         {
             get
@@ -57,13 +92,39 @@ namespace ServiciosEducativosComunitarios.ViewModel
 
         private void AddExecute(object service)
         {
-            serviceRepository.Add(Service);
-            MessageBox.Show("Servicio agregado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (this.validate())
+            {
+                serviceRepository.Add(Service);
+                MessageBox.Show("Servicio agregado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
-        private bool AddCanExecute(object user)
+        private bool AddCanExecute(object service)
         {
             return true;
         }
+
+        public ICommand UpdateCommand
+        {
+            get
+            {
+                return new ViewModelCommand(UpdateExecute, UpdateCanExecute);
+            }
+        }
+
+        private void UpdateExecute(object service)
+        {
+            if (this.validate())
+            {
+                serviceRepository.Update(Service);
+                MessageBox.Show("Servicio actualizado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private bool UpdateCanExecute(object service)
+        {
+            return true;
+        }
+
     }
 }

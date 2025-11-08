@@ -272,7 +272,14 @@
                                 <DataGridTemplateColumn Header="">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonDeleteLocality_Click">×</Button>
+                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonEditLocality_Click" Margin="3">Editar</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonDeleteLocality_Click" Margin="3">Eliminar</Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
@@ -329,7 +336,14 @@
                                 <DataGridTemplateColumn Header="">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonDeleteService_Click">×</Button>
+                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonEditService_Click" Margin="3">Editar</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonDeleteService_Click" Margin="3">Eliminar</Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

@@ -22,14 +22,18 @@ namespace ServiciosEducativosComunitarios.View
     public partial class ServicesView : Window
     {
         private readonly AppView appView;
+
+        private ServiceModel? serviceModel;
+
         public ServicesView(AppView appView)
         {
             this.appView = appView;
             InitializeComponent();
         }
 
-        public void ResetForm()
+        private void ResetForm()
         {
+            this.TxtId.Text = "0";
             this.TxtCode.Text = string.Empty;
             this.ComboLocality.SelectedIndex = 0;
             this.ComboProgram.SelectedIndex = 0;
@@ -90,6 +94,34 @@ namespace ServiciosEducativosComunitarios.View
                 // Manejo simple: mostrar mensaje. Cambiar por logging si procede.
                 MessageBox.Show($"Error cargando localidades: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+
+            if (this.serviceModel != null)
+            {
+                this.TxtId.Text = this.serviceModel.Id.ToString();
+                this.TxtCode.Text = this.serviceModel.Code;
+                this.ComboLocality.SelectedValue = this.serviceModel.LocalityId;
+                this.ComboProgram.SelectedValue = this.serviceModel.Program;
+                this.ComboPeriod.SelectedValue = this.serviceModel.Period;
+                this.ComboStatus.SelectedValue = this.serviceModel.Status;
+            }
+        }
+
+        public void ShowNew()
+        {
+            this.ResetForm();
+            this.serviceModel = null;
+            this.BtnCreate.Visibility = Visibility.Visible;
+            this.BtnUpdate.Visibility = Visibility.Collapsed;
+            this.Show();
+        }
+
+        public void ShowEdit(ServiceModel serviceModel)
+        {
+            this.ResetForm();
+            this.serviceModel = serviceModel;
+            this.BtnCreate.Visibility = Visibility.Collapsed;
+            this.BtnUpdate.Visibility = Visibility.Visible;
+            this.Show();
         }
 
     }

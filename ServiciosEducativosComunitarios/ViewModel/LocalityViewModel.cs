@@ -62,11 +62,65 @@ namespace ServiciosEducativosComunitarios.ViewModel
 
         private void AddExecute(object locality)
         {
-            localityRepository.Add(Locality);
-            MessageBox.Show("Localidad agregada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            if (this.validate())
+            {
+                localityRepository.Add(Locality);
+                MessageBox.Show("Localidad agregada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
         }
 
-        private bool AddCanExecute(object user)
+        private bool validate()
+        {
+            if (string.IsNullOrEmpty(Locality.Code))
+            {
+                MessageBox.Show("Ingresa una clave", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (string.IsNullOrEmpty(Locality.Comunidad))
+            {
+                MessageBox.Show("Ingresa una comunidad", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Locality.Municipio == 0)
+            {
+                MessageBox.Show("Selecciona un municipio", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            if (Locality.Ambito == 0)
+            {
+                MessageBox.Show("Selecciona un ámbito", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return false;
+            }
+
+            return true;
+        }
+
+        private bool AddCanExecute(object locality)
+        {
+            return true;
+        }
+
+        public ICommand UpdateCommand
+        {
+            get
+            {
+                return new ViewModelCommand(UpdateExecute, UpdateCanExecute);
+            }
+        }
+
+        private void UpdateExecute(object locality)
+        {
+            if (this.validate())
+            {
+                localityRepository.Update(Locality);
+                MessageBox.Show("Localidad actualizada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private bool UpdateCanExecute(object locality)
         {
             return true;
         }

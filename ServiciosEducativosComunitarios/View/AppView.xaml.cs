@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualBasic.ApplicationServices;
 using ServiciosEducativosComunitarios.Model;
 using ServiciosEducativosComunitarios.Repositories;
+using ServiciosEducativosComunitarios.ViewModel;
 using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -86,7 +87,7 @@ namespace ServiciosEducativosComunitarios.View
 
         private void MenuNewLocality_Click(object sender, RoutedEventArgs e)
         {
-            this.localityView.Show();
+            this.localityView.ShowNew();
         }
 
         private void MenuNewService_Click(object sender, RoutedEventArgs e)
@@ -169,14 +170,12 @@ namespace ServiciosEducativosComunitarios.View
 
         private void ButtonNewLocality_Click(object sender, RoutedEventArgs e)
         {
-            this.localityView.ResetForm();
-            this.localityView.Visibility = Visibility.Visible;
+            this.localityView.ShowNew();
         }
 
         private void ButtonNewService_Click(object sender, RoutedEventArgs e)
         {
-            this.servicesView.ResetForm();
-            this.servicesView.Visibility = Visibility.Visible;
+            this.servicesView.ShowNew();
         }
 
         private void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
@@ -190,6 +189,7 @@ namespace ServiciosEducativosComunitarios.View
                 LocalityModel localityModel = new LocalityModel { Id = id };
                 var repo = new LocalityRepository();
                 Task.Run(() => repo.Delete(localityModel));
+                MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 _ = LoadLocalitiesAsync(true);
             }
             catch (Exception ex)
@@ -208,6 +208,7 @@ namespace ServiciosEducativosComunitarios.View
                 ServiceModel serviceModel = new ServiceModel { Id = id };
                 var repo = new ServiceRepository();
                 Task.Run(() => repo.Delete(serviceModel));
+                MessageBox.Show("Servicio eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
                 _ = LoadServicesAsync(true);
             }
             catch (Exception ex)
@@ -215,5 +216,24 @@ namespace ServiciosEducativosComunitarios.View
             }
         }
 
+        private void ButtonEditService_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+
+            if (button.DataContext is ServiceModel serviceModel)
+            {
+                this.servicesView.ShowEdit(serviceModel);
+            }
+        }
+
+        private void ButtonEditLocality_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+
+            if (button.DataContext is LocalityModel localityModel)
+            {
+                this.localityView.ShowEdit(localityModel);
+            }
+        }
     }
 }

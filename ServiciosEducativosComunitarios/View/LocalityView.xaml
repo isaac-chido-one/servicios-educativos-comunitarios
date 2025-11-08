@@ -176,11 +176,22 @@
                 Name="TxtPopulation"
                 Text="{Binding Locality.Poblacion, UpdateSourceTrigger=PropertyChanged}"
              ></TextBox>
+            <TextBox 
+                Grid.Column="3" 
+                Grid.Row="3" 
+                VerticalAlignment="Center" 
+                Margin="0,0,10,0" 
+                MaxLines="1" 
+                Name="TxtId"
+                Text="{Binding Locality.Id, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="Hidden"
+            ></TextBox>
         </Grid>
 
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
             <Button Margin="10" Padding="10" Name="BtnCancel" Click="BtnCancel_Click">Cancelar</Button>
-            <Button Margin="10" Padding="10" Name="BtnStore" Command="{Binding AddCommand}" Click="BtnStore_Click">Guardar</Button>
+            <Button Margin="10" Padding="10" Name="BtnCreate" Command="{Binding AddCommand}" Click="BtnStore_Click">Guardar</Button>
+            <Button Margin="10" Padding="10" Name="BtnUpdate" Command="{Binding UpdateCommand}" Click="BtnStore_Click">Guardar</Button>
         </WrapPanel>
     </Grid>
 </Window>

@@ -63,6 +63,17 @@
                 <ComboBoxItem Tag="0" Content="Seleccionar ..."></ComboBoxItem>
             </ComboBox>
 
+            <TextBox 
+                Grid.Column="1" 
+                Grid.Row="2" 
+                VerticalAlignment="Center" 
+                Margin="0,0,10,0" 
+                MaxLines="1" 
+                Name="TxtId"
+                Text="{Binding Service.Id, UpdateSourceTrigger=PropertyChanged}"
+                Visibility="Hidden"
+            ></TextBox>
+
             <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Programa"></Label>
             <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Ciclo escolar"></Label>
             <Label Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Estatus"></Label>
@@ -118,7 +129,8 @@
 
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
             <Button Margin="10" Padding="10" Name="BtnCancel" Click="BtnCancel_Click">Cancelar</Button>
-            <Button Margin="10" Padding="10" Name="BtnStore" Command="{Binding AddCommand}" Click="BtnStore_Click">Guardar</Button>
+            <Button Margin="10" Padding="10" Name="BtnCreate" Command="{Binding AddCommand}" Click="BtnStore_Click">Guardar</Button>
+            <Button Margin="10" Padding="10" Name="BtnUpdate" Command="{Binding UpdateCommand}" Click="BtnStore_Click">Guardar</Button>
         </WrapPanel>
     </Grid>
 </Window>
