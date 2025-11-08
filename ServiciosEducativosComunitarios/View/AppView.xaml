@@ -246,6 +246,8 @@
                             Grid.Column="0" 
                             Grid.Row="1" 
                             Name="DataGridLocalities"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
                         >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Clave" Binding="{Binding Code}"></DataGridTextColumn>
@@ -267,6 +269,13 @@
                                 <DataGridTextColumn Header="Latitud" Binding="{Binding Latitud}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="Longitud" Binding="{Binding Longitud}"></DataGridTextColumn>
                                 <DataGridTextColumn Header="Población" Binding="{Binding Poblacion}"></DataGridTextColumn>
+                                <DataGridTemplateColumn Header="">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonDeleteLocality_Click">×</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
                             </DataGrid.Columns>
                         </DataGrid>
                     </Grid>
@@ -290,6 +299,8 @@
                             Grid.Column="0" 
                             Grid.Row="1" 
                             Name="DataGridServices"
+                            CanUserAddRows="False"
+                            CanUserDeleteRows="False"
                         >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Clave" Binding="{Binding Code}"></DataGridTextColumn>
@@ -312,6 +323,13 @@
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <TextBlock Text="{Binding Status, Converter={StaticResource IdToNameConverter}, ConverterParameter=Status}"/>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+                                <DataGridTemplateColumn Header="">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonDeleteService_Click">×</Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

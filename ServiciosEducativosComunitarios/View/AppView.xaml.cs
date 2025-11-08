@@ -178,5 +178,42 @@ namespace ServiciosEducativosComunitarios.View
             this.servicesView.ResetForm();
             this.servicesView.Visibility = Visibility.Visible;
         }
+
+        private void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+
+            try
+            {
+                string tag = button.Tag.ToString();
+                int id = int.Parse(tag);
+                LocalityModel localityModel = new LocalityModel { Id = id };
+                var repo = new LocalityRepository();
+                Task.Run(() => repo.Delete(localityModel));
+                _ = LoadLocalitiesAsync(true);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+        private void ButtonDeleteService_Click(object sender, RoutedEventArgs e)
+        {
+            Button button = (Button)sender;
+
+            try
+            {
+                string tag = button.Tag.ToString();
+                int id = int.Parse(tag);
+                ServiceModel serviceModel = new ServiceModel { Id = id };
+                var repo = new ServiceRepository();
+                Task.Run(() => repo.Delete(serviceModel));
+                _ = LoadServicesAsync(true);
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
     }
 }
