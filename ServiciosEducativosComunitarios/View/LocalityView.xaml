@@ -5,55 +5,129 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiciosEducativosComunitarios.View"
         xmlns:viewModel="clr-namespace:ServiciosEducativosComunitarios.ViewModel"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
-        Title="Localidad INEGI" 
-        Height="360" 
-        Width="600"
+        Title="Localidad INEGI" Height="360" Width="600"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
- >
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True">
     
     <Window.DataContext>
         <viewModel:LocalityViewModel/>
     </Window.DataContext>
-    
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="2*"></RowDefinition>
-            <RowDefinition Height="6*"></RowDefinition>
-            <RowDefinition Height="2*"></RowDefinition>
-        </Grid.RowDefinitions>
 
-        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Content="Localidad INEGI"></Label>
+    <!--#REGION BORDER - BACKGROUND -->
+    <Border CornerRadius="10" BorderThickness="1">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.75"/>
+                <GradientStop Color="{StaticResource secondaryBackColor2}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
 
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="4*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
+        <Border.Background>
+            <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
+                <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <!--#ENDREGION BORDER - BACKGROUND -->
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="3*"></RowDefinition>
-                <RowDefinition Height="3*"></RowDefinition>
-                <RowDefinition Height="3*"></RowDefinition>
-                <RowDefinition Height="3*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
+                <RowDefinition Height="6*"></RowDefinition>
+                <RowDefinition Height="2*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Clave"></Label>
-            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Municipio"></Label>
-            <Label Grid.Column="0" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Comunidad"></Label>
-            <Label Grid.Column="0" Grid.Row="3" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Ámbito"></Label>
 
-            <TextBox 
-                Grid.Column="1" 
-                Grid.Row="0" 
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" 
+                             Height="30"  
+                             Grid.Row="0"
+                             Margin="0,20,0,0"
+                             HorizontalAlignment="Center">
+                    <fa:IconImage Icon="MapLocation" Foreground="{StaticResource color5}" 
+                                Height="25" Width="25"/>
+                    <Label VerticalAlignment="Center" 
+                             HorizontalAlignment="Center" 
+                             Content="Localidad INEGI"
+                             Foreground="{StaticResource titleColor2}"
+                             FontSize="20"
+                             FontFamily="Montserrat"
+                             Margin="0,0,10,0"
+                             Padding="10,5,10,5"></Label>
+                </StackPanel>
+            </StackPanel>
+
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="4*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="3*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                    <RowDefinition Height="3*"></RowDefinition>
+                </Grid.RowDefinitions>
+
+                <!-- #REGION LABELS PART 1-->
+                <Label Grid.Column="0" Grid.Row="0" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       Margin="20,0,0,0" 
+                       Content="Clave" 
+                       Foreground="{StaticResource titleColor3}"
+                       FontFamily="Montserrat"
+                       FontSize="14"></Label>
+                <Label Grid.Column="0" Grid.Row="1" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       Margin="20,0,0,0" Content="Municipio" 
+                       Foreground="{StaticResource titleColor3}"
+                       FontFamily="Montserrat"
+                        FontSize="14"></Label>
+                <Label Grid.Column="0" Grid.Row="2" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       Margin="20,0,0,0"
+                       Padding="0,0,5,0"
+                       Content="Comunidad" 
+                       Foreground="{StaticResource titleColor3}"
+                       FontFamily="Montserrat"
+                        FontSize="14"></Label>
+                <Label Grid.Column="0" Grid.Row="3" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       Margin="20,0,0,0" Content="Ámbito" 
+                       Foreground="{StaticResource titleColor3}"
+                       FontFamily="Montserrat"
+                       FontSize="14"></Label>
+                <!--#ENDREGION-->
+                <!--#REGION TEXTBOX PART1-->
+                <TextBox 
+                Grid.Column="1" Grid.Row="0" 
                 VerticalAlignment="Center" 
                 Margin="0,0,10,0" 
                 MaxLines="1" 
                 Name="TxtCode"
                 Text="{Binding Locality.Code, UpdateSourceTrigger=PropertyChanged}"
-            ></TextBox>
-            <ComboBox 
+                FontSize="15"
+                FontFamily="Montserrat"
+                FontWeight="Light"
+                Background="Transparent"
+                Foreground="{StaticResource titleColor3}"
+                CaretBrush="{StaticResource titleColor3}"
+                BorderBrush="{StaticResource color5}"
+                BorderThickness="0,0,0,1"
+                Height="28"
+                VerticalContentAlignment="Center"
+                    ></TextBox>
+                <ComboBox 
                 Grid.Column="1" 
                 Grid.Row="1" 
                 VerticalAlignment="Center" 
@@ -62,67 +136,67 @@
                 SelectedValuePath="Tag"
                 SelectedValue="{Binding Locality.Municipio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
              >
-                <ComboBoxItem Tag="0" Content="Seleccionar..." IsSelected="True"></ComboBoxItem>
-                <ComboBoxItem Tag="1" Content="Apozol"></ComboBoxItem>
-                <ComboBoxItem Tag="2" Content="Apulco"></ComboBoxItem>
-                <ComboBoxItem Tag="3" Content="Atolinga"></ComboBoxItem>
-                <ComboBoxItem Tag="4" Content="Benito Juárez"></ComboBoxItem>
-                <ComboBoxItem Tag="5" Content="Calera"></ComboBoxItem>
-                <ComboBoxItem Tag="6" Content="Cañitas de Felipe Pescador"></ComboBoxItem>
-                <ComboBoxItem Tag="7" Content="Concepción del Oro"></ComboBoxItem>
-                <ComboBoxItem Tag="8" Content="Cuauhtémoc"></ComboBoxItem>
-                <ComboBoxItem Tag="9" Content="Chalchihuites"></ComboBoxItem>
-                <ComboBoxItem Tag="10" Content="Fresnillo"></ComboBoxItem>
-                <ComboBoxItem Tag="11" Content="Trinidad García de la Cadena"></ComboBoxItem>
-                <ComboBoxItem Tag="12" Content="Genaro Codina"></ComboBoxItem>
-                <ComboBoxItem Tag="13" Content="General Enrique Estrada"></ComboBoxItem>
-                <ComboBoxItem Tag="14" Content="General Francisco R. Murguía"></ComboBoxItem>
-                <ComboBoxItem Tag="15" Content="El Plateado de Joaquín Amaro"></ComboBoxItem>
-                <ComboBoxItem Tag="16" Content="General Pánfilo Natera"></ComboBoxItem>
-                <ComboBoxItem Tag="17" Content="Guadalupe"></ComboBoxItem>
-                <ComboBoxItem Tag="18" Content="Huanusco"></ComboBoxItem>
-                <ComboBoxItem Tag="19" Content="Jalpa"></ComboBoxItem>
-                <ComboBoxItem Tag="20" Content="Jerez"></ComboBoxItem>
-                <ComboBoxItem Tag="21" Content="Jiménez del Teul"></ComboBoxItem>
-                <ComboBoxItem Tag="22" Content="Juan Aldama"></ComboBoxItem>
-                <ComboBoxItem Tag="23" Content="Juchipila"></ComboBoxItem>
-                <ComboBoxItem Tag="24" Content="Loreto"></ComboBoxItem>
-                <ComboBoxItem Tag="25" Content="Luis Moya"></ComboBoxItem>
-                <ComboBoxItem Tag="26" Content="Mazapil"></ComboBoxItem>
-                <ComboBoxItem Tag="27" Content="Melchor Ocampo"></ComboBoxItem>
-                <ComboBoxItem Tag="28" Content="Mezquital del Oro"></ComboBoxItem>
-                <ComboBoxItem Tag="29" Content="Miguel Auza"></ComboBoxItem>
-                <ComboBoxItem Tag="30" Content="Momax"></ComboBoxItem>
-                <ComboBoxItem Tag="31" Content="Monte Escobedo"></ComboBoxItem>
-                <ComboBoxItem Tag="32" Content="Morelos"></ComboBoxItem>
-                <ComboBoxItem Tag="33" Content="Moyahua de Estrada"></ComboBoxItem>
-                <ComboBoxItem Tag="34" Content="Nochistlán de Mejía"></ComboBoxItem>
-                <ComboBoxItem Tag="35" Content="Noria de Ángeles"></ComboBoxItem>
-                <ComboBoxItem Tag="36" Content="Ojocaliente"></ComboBoxItem>
-                <ComboBoxItem Tag="37" Content="Pánuco"></ComboBoxItem>
-                <ComboBoxItem Tag="38" Content="Pinos"></ComboBoxItem>
-                <ComboBoxItem Tag="39" Content="Río Grande"></ComboBoxItem>
-                <ComboBoxItem Tag="40" Content="Sain Alto"></ComboBoxItem>
-                <ComboBoxItem Tag="41" Content="El Salvador"></ComboBoxItem>
-                <ComboBoxItem Tag="58" Content="Santa María de la Paz"></ComboBoxItem>
-                <ComboBoxItem Tag="42" Content="Sombrerete"></ComboBoxItem>
-                <ComboBoxItem Tag="43" Content="Susticacán"></ComboBoxItem>
-                <ComboBoxItem Tag="44" Content="Tabasco"></ComboBoxItem>
-                <ComboBoxItem Tag="45" Content="Tepechitlán"></ComboBoxItem>
-                <ComboBoxItem Tag="46" Content="Tepetongo"></ComboBoxItem>
-                <ComboBoxItem Tag="47" Content="Teúl de González Ortega"></ComboBoxItem>
-                <ComboBoxItem Tag="48" Content="Tlaltenango de Sánchez Román"></ComboBoxItem>
-                <ComboBoxItem Tag="57" Content="Trancoso"></ComboBoxItem>
-                <ComboBoxItem Tag="49" Content="Valparaíso"></ComboBoxItem>
-                <ComboBoxItem Tag="50" Content="Vetagrande"></ComboBoxItem>
-                <ComboBoxItem Tag="51" Content="Villa de Cos"></ComboBoxItem>
-                <ComboBoxItem Tag="52" Content="Villa García"></ComboBoxItem>
-                <ComboBoxItem Tag="53" Content="Villa González Ortega"></ComboBoxItem>
-                <ComboBoxItem Tag="54" Content="Villa Hidalgo"></ComboBoxItem>
-                <ComboBoxItem Tag="55" Content="Villanueva"></ComboBoxItem>
-                <ComboBoxItem Tag="56" Content="Zacatecas"></ComboBoxItem>
-            </ComboBox>
-            <TextBox 
+                    <ComboBoxItem Tag="0" Content="Seleccionar..." IsSelected="True"></ComboBoxItem>
+                    <ComboBoxItem Tag="1" Content="Apozol"></ComboBoxItem>
+                    <ComboBoxItem Tag="2" Content="Apulco"></ComboBoxItem>
+                    <ComboBoxItem Tag="3" Content="Atolinga"></ComboBoxItem>
+                    <ComboBoxItem Tag="4" Content="Benito Juárez"></ComboBoxItem>
+                    <ComboBoxItem Tag="5" Content="Calera"></ComboBoxItem>
+                    <ComboBoxItem Tag="6" Content="Cañitas de Felipe Pescador"></ComboBoxItem>
+                    <ComboBoxItem Tag="7" Content="Concepción del Oro"></ComboBoxItem>
+                    <ComboBoxItem Tag="8" Content="Cuauhtémoc"></ComboBoxItem>
+                    <ComboBoxItem Tag="9" Content="Chalchihuites"></ComboBoxItem>
+                    <ComboBoxItem Tag="10" Content="Fresnillo"></ComboBoxItem>
+                    <ComboBoxItem Tag="11" Content="Trinidad García de la Cadena"></ComboBoxItem>
+                    <ComboBoxItem Tag="12" Content="Genaro Codina"></ComboBoxItem>
+                    <ComboBoxItem Tag="13" Content="General Enrique Estrada"></ComboBoxItem>
+                    <ComboBoxItem Tag="14" Content="General Francisco R. Murguía"></ComboBoxItem>
+                    <ComboBoxItem Tag="15" Content="El Plateado de Joaquín Amaro"></ComboBoxItem>
+                    <ComboBoxItem Tag="16" Content="General Pánfilo Natera"></ComboBoxItem>
+                    <ComboBoxItem Tag="17" Content="Guadalupe"></ComboBoxItem>
+                    <ComboBoxItem Tag="18" Content="Huanusco"></ComboBoxItem>
+                    <ComboBoxItem Tag="19" Content="Jalpa"></ComboBoxItem>
+                    <ComboBoxItem Tag="20" Content="Jerez"></ComboBoxItem>
+                    <ComboBoxItem Tag="21" Content="Jiménez del Teul"></ComboBoxItem>
+                    <ComboBoxItem Tag="22" Content="Juan Aldama"></ComboBoxItem>
+                    <ComboBoxItem Tag="23" Content="Juchipila"></ComboBoxItem>
+                    <ComboBoxItem Tag="24" Content="Loreto"></ComboBoxItem>
+                    <ComboBoxItem Tag="25" Content="Luis Moya"></ComboBoxItem>
+                    <ComboBoxItem Tag="26" Content="Mazapil"></ComboBoxItem>
+                    <ComboBoxItem Tag="27" Content="Melchor Ocampo"></ComboBoxItem>
+                    <ComboBoxItem Tag="28" Content="Mezquital del Oro"></ComboBoxItem>
+                    <ComboBoxItem Tag="29" Content="Miguel Auza"></ComboBoxItem>
+                    <ComboBoxItem Tag="30" Content="Momax"></ComboBoxItem>
+                    <ComboBoxItem Tag="31" Content="Monte Escobedo"></ComboBoxItem>
+                    <ComboBoxItem Tag="32" Content="Morelos"></ComboBoxItem>
+                    <ComboBoxItem Tag="33" Content="Moyahua de Estrada"></ComboBoxItem>
+                    <ComboBoxItem Tag="34" Content="Nochistlán de Mejía"></ComboBoxItem>
+                    <ComboBoxItem Tag="35" Content="Noria de Ángeles"></ComboBoxItem>
+                    <ComboBoxItem Tag="36" Content="Ojocaliente"></ComboBoxItem>
+                    <ComboBoxItem Tag="37" Content="Pánuco"></ComboBoxItem>
+                    <ComboBoxItem Tag="38" Content="Pinos"></ComboBoxItem>
+                    <ComboBoxItem Tag="39" Content="Río Grande"></ComboBoxItem>
+                    <ComboBoxItem Tag="40" Content="Sain Alto"></ComboBoxItem>
+                    <ComboBoxItem Tag="41" Content="El Salvador"></ComboBoxItem>
+                    <ComboBoxItem Tag="58" Content="Santa María de la Paz"></ComboBoxItem>
+                    <ComboBoxItem Tag="42" Content="Sombrerete"></ComboBoxItem>
+                    <ComboBoxItem Tag="43" Content="Susticacán"></ComboBoxItem>
+                    <ComboBoxItem Tag="44" Content="Tabasco"></ComboBoxItem>
+                    <ComboBoxItem Tag="45" Content="Tepechitlán"></ComboBoxItem>
+                    <ComboBoxItem Tag="46" Content="Tepetongo"></ComboBoxItem>
+                    <ComboBoxItem Tag="47" Content="Teúl de González Ortega"></ComboBoxItem>
+                    <ComboBoxItem Tag="48" Content="Tlaltenango de Sánchez Román"></ComboBoxItem>
+                    <ComboBoxItem Tag="57" Content="Trancoso"></ComboBoxItem>
+                    <ComboBoxItem Tag="49" Content="Valparaíso"></ComboBoxItem>
+                    <ComboBoxItem Tag="50" Content="Vetagrande"></ComboBoxItem>
+                    <ComboBoxItem Tag="51" Content="Villa de Cos"></ComboBoxItem>
+                    <ComboBoxItem Tag="52" Content="Villa García"></ComboBoxItem>
+                    <ComboBoxItem Tag="53" Content="Villa González Ortega"></ComboBoxItem>
+                    <ComboBoxItem Tag="54" Content="Villa Hidalgo"></ComboBoxItem>
+                    <ComboBoxItem Tag="55" Content="Villanueva"></ComboBoxItem>
+                    <ComboBoxItem Tag="56" Content="Zacatecas"></ComboBoxItem>
+                </ComboBox>
+                <TextBox 
                 Grid.Column="1" 
                 Grid.Row="2" 
                 VerticalAlignment="Center" 
@@ -130,8 +204,20 @@
                 MaxLines="1" 
                 Name="TxtName"
                 Text="{Binding Locality.Comunidad, UpdateSourceTrigger=PropertyChanged}"
-            ></TextBox>
-            <ComboBox 
+                FontSize="15"
+                FontFamily="Montserrat"
+                FontWeight="Light"
+                Background="Transparent"
+                Foreground="{StaticResource titleColor3}"
+                CaretBrush="{StaticResource titleColor3}"
+                BorderBrush="{StaticResource color5}"
+                BorderThickness="0,0,0,1"
+                Height="28"
+                VerticalContentAlignment="Center"
+                    ></TextBox>
+                <!--#ENDREGION TEXT BOX PART1-->
+                
+                <ComboBox 
                 Grid.Column="1" 
                 Grid.Row="3" 
                 VerticalAlignment="Center" 
@@ -140,16 +226,39 @@
                 SelectedValuePath="Tag"
                 SelectedValue="{Binding Locality.Ambito, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
             >
-                <ComboBoxItem Tag="0" Content="Seleccionar..."></ComboBoxItem>
-                <ComboBoxItem Tag="1" Content="Rural"></ComboBoxItem>
-                <ComboBoxItem Tag="1" Content="Urbano"></ComboBoxItem>
-            </ComboBox>
-
-            <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Latitud"></Label>
-            <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Longitud"></Label>
-            <Label Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Población"></Label>
-
-            <TextBox 
+                    <ComboBoxItem Tag="0" Content="Seleccionar..."></ComboBoxItem>
+                    <ComboBoxItem Tag="1" Content="Rural"></ComboBoxItem>
+                    <ComboBoxItem Tag="1" Content="Urbano"></ComboBoxItem>
+                </ComboBox>
+                
+                <!-- #REGION LABELS PART2-->
+                <Label Grid.Column="2" Grid.Row="0" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       Margin="10,0,0,0" 
+                       Content="Latitud" 
+                       Foreground="{StaticResource titleColor3}"
+                       FontFamily="Montserrat"
+                        FontSize="14"></Label>
+                <Label Grid.Column="2" Grid.Row="1" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       Margin="10,0,0,0" 
+                       Content="Longitud" 
+                       Foreground="{StaticResource titleColor3}"
+                       FontFamily="Montserrat"
+                       FontSize="14"></Label>
+                <Label Grid.Column="2" Grid.Row="2" 
+                       VerticalAlignment="Center" 
+                       HorizontalAlignment="Left" 
+                       Margin="10,0,0,0" 
+                       Content="Población" 
+                       Foreground="{StaticResource titleColor3}"
+                       FontFamily="Montserrat"
+                        FontSize="14"></Label>
+                <!--#ENDREGION-->
+                <!--#REGION TEXTBOX PART2-->
+                <TextBox 
                 Grid.Column="3" 
                 Grid.Row="0" 
                 VerticalAlignment="Center" 
@@ -157,8 +266,18 @@
                 MaxLines="1" 
                 Name="TxtLatitude"
                 Text="{Binding Locality.Latitud, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="15"
+                FontFamily="Montserrat"
+                FontWeight="Light"
+                Background="Transparent"
+                Foreground="{StaticResource titleColor3}"
+                CaretBrush="{StaticResource titleColor3}"
+                BorderBrush="{StaticResource color5}"
+                BorderThickness="0,0,0,1"
+                Height="28"
+                VerticalContentAlignment="Center"    
              ></TextBox>
-            <TextBox 
+                <TextBox 
                 Grid.Column="3" 
                 Grid.Row="1" 
                 VerticalAlignment="Center" 
@@ -166,8 +285,18 @@
                 MaxLines="1" 
                 Name="TxtLongitude"
                 Text="{Binding Locality.Longitud, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="15"
+                FontFamily="Montserrat"
+                FontWeight="Light"
+                Background="Transparent"
+                Foreground="{StaticResource titleColor3}"
+                CaretBrush="{StaticResource titleColor3}"
+                BorderBrush="{StaticResource color5}"
+                BorderThickness="0,0,0,1"
+                Height="28"
+                VerticalContentAlignment="Center"
              ></TextBox>
-            <TextBox 
+                <TextBox 
                 Grid.Column="3" 
                 Grid.Row="2" 
                 VerticalAlignment="Center" 
@@ -175,8 +304,18 @@
                 MaxLines="1" 
                 Name="TxtPopulation"
                 Text="{Binding Locality.Poblacion, UpdateSourceTrigger=PropertyChanged}"
+                FontSize="15"
+                FontFamily="Montserrat"
+                FontWeight="Light"
+                Background="Transparent"
+                Foreground="{StaticResource titleColor3}"
+                CaretBrush="{StaticResource titleColor3}"
+                BorderBrush="{StaticResource color5}"
+                BorderThickness="0,0,0,1"
+                Height="28"
+                VerticalContentAlignment="Center"
              ></TextBox>
-            <TextBox 
+                <TextBox 
                 Grid.Column="3" 
                 Grid.Row="3" 
                 VerticalAlignment="Center" 
@@ -186,12 +325,37 @@
                 Text="{Binding Locality.Id, UpdateSourceTrigger=PropertyChanged}"
                 Visibility="Hidden"
             ></TextBox>
+                <!--#ENDREGION TEXTBOX PART2-->
+            </Grid>
+            
+            <!--#REGION BUTTON-->
+            <WrapPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button Name="BtnCancel" 
+                        Click="BtnCancel_Click"
+                        Style="{StaticResource controlButtonServices}"
+                        Tag="{StaticResource color4}"
+                        Content="Cancelar"
+                        Margin="10">
+                </Button>
+                <Button Name="BtnCreate" 
+                        Command="{Binding AddCommand}" 
+                        Click="BtnStore_Click"
+                        Style="{StaticResource controlButtonServices}"
+                        Tag="{StaticResource color4}"
+                        Content="Guardar"
+                        Margin="10">
+                    </Button>
+                <Button Name="BtnUpdate" 
+                            Command="{Binding UpdateCommand}" 
+                            Click="BtnStore_Click"
+                            Style="{StaticResource controlButtonServices}"
+                            Tag="{StaticResource color4}"
+                            Content="Guardar"
+                            Margin="10">
+                </Button>
+            </WrapPanel>
+            <!--#ENDREGION-->
+            
         </Grid>
-
-        <WrapPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button Margin="10" Padding="10" Name="BtnCancel" Click="BtnCancel_Click">Cancelar</Button>
-            <Button Margin="10" Padding="10" Name="BtnCreate" Command="{Binding AddCommand}" Click="BtnStore_Click">Guardar</Button>
-            <Button Margin="10" Padding="10" Name="BtnUpdate" Command="{Binding UpdateCommand}" Click="BtnStore_Click">Guardar</Button>
-        </WrapPanel>
-    </Grid>
+    </Border>
 </Window>

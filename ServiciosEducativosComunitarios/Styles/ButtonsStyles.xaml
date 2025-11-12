@@ -126,4 +126,31 @@
         <Setter Property="Height" Value="16"/>
         <!--<Setter Property="Margin" Value="10,9,9,10"/>-->
     </Style>
+
+    <!-- Control Button Services -->
+    <Style x:Key="controlButtonServices" TargetType="Button">
+        <!-- Normal Button Style -->
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="Width" Value="60"/>
+        <Setter Property="Background" Value="{StaticResource panelOverColor}"/>
+        <Setter Property="Foreground" Value="{StaticResource titleColor2}"/>
+        <Setter Property="FontWeight" Value="Medium"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border Background="{TemplateBinding Background}"
+                        CornerRadius="4">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <!-- Button Sytle on hover  -->
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource panelActiveColor}"/>
+                <Setter Property="Foreground" Value="{Binding Path=Tag, RelativeSource={RelativeSource Self}}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
 </ResourceDictionary>
