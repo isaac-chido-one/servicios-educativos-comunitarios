@@ -4,6 +4,7 @@
         xmlns:local="clr-namespace:ServiciosEducativosComunitarios.View"
         xmlns:customcontrols="clr-namespace:ServiciosEducativosComunitarios.CustomControls"
         xmlns:viewModel="clr-namespace:ServiciosEducativosComunitarios.ViewModel"
+         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         Title="LoginView" Height="550" Width="800"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -23,10 +24,7 @@
         <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"></Binding>
     </Window.Visibility>
     <Border CornerRadius="10">
-    <!--  <Border.Background>
-            <ImageBrush ImageSource="/img/fondo.jpeg" 
-                        Stretch="Uniform"/>
-        </Border.Background> -->
+
         <Border CornerRadius="10"
             BorderThickness="1"
                 Opacity="0.98">
@@ -51,8 +49,8 @@
                 <Grid>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
-                        <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="31"/>
+                        <ColumnDefinition Width="31"/>
                         <ColumnDefinition Width="5"/>
                     </Grid.ColumnDefinitions>
 
@@ -64,76 +62,28 @@
                                VerticalAlignment="Center"
                                Margin="10,0,0,0"/>
                     <Button x:Name="btnMinimize"
-                            BorderThickness="0"
-                            Content="-"
-                            Foreground="White"
-                            FontSize="16"
-                            FontFamily="Montserrat"
-                            Cursor=""
+                            Style="{StaticResource controlButton}"
+                            Tag="{StaticResource color4}"
                             Grid.Column="1"
                             Click="btnMinimize_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background"
-                                        Value="#0077C8"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" 
-                                                Value="#003057"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="18" Height="18"
-                                        CornerRadius="9"
-                                        Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                                                      HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
+                        <fa:IconImage Icon="WindowMinimize" Style="{StaticResource controlButtonIcon}"/>
                     </Button>
                     <Button x:Name="btnClose"
-                            BorderThickness="0"
-                            Content="x"
-                            Foreground="White"
-                            FontSize="16"
-                            FontFamily="Montserrat"
-                            Cursor=""
+                            Style="{StaticResource controlButton}"
+                            Tag="{StaticResource color4}"
                             Grid.Column="2"
                             Click="btnClose_Click">
-                        <Button.Style>
-                            <Style TargetType="Button">
-                                <Setter Property="Background" Value="#0077C8"/>
-                                <Style.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter Property="Background" Value="#003057"/>
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </Button.Style>
-
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border Width="18" Height="18"
-                CornerRadius="9"
-                Background="{TemplateBinding Background}">
-                                    <ContentPresenter VerticalAlignment="Center"
-                              HorizontalAlignment="Center"/>
-                                </Border>
-                            </ControlTemplate>
-                        </Button.Template>
+                        <fa:IconImage Icon="Xmark" Style="{StaticResource controlButtonIcon}"/>
                     </Button>
-
+                    
                 </Grid>
                 <StackPanel Width="250" Grid.Row="2"
                             Orientation="Vertical"
                             Margin="0,35,0,0">
-                    <Image Source="/img/masculino.png"
-                           Width="120" Height="120"/>
+                    <fa:IconImage Icon="CircleUser"
+                                  Foreground="{StaticResource color2}" 
+                                  Width="100"
+                                  Height="100"/>
                     
                     <TextBlock Text="Servicios Educativos"
                                Foreground="White" FontSize="22"
@@ -175,7 +125,8 @@
                             HorizontalAlignment="Left"
                             Margin="0,40,0,0"/>
                     <customcontrols:BindablePasswordBox
-                        Password="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                        Password="{Binding Password, Mode=TwoWay, 
+                        UpdateSourceTrigger=PropertyChanged}"
                         ></customcontrols:BindablePasswordBox>
                     <TextBlock 
                         Text="{Binding ErrorMessage}"

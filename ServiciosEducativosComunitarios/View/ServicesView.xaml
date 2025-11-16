@@ -5,17 +5,38 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiciosEducativosComunitarios.View"
         xmlns:viewModel="clr-namespace:ServiciosEducativosComunitarios.ViewModel"
+        xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
         mc:Ignorable="d"
         Title="Servicios educativos" 
-        Height="330" 
-        Width="600"
+        Height="330" Width="600"
         WindowStartupLocation="CenterScreen"
         ResizeMode="CanResize"
-        IsVisibleChanged="Window_IsVisibleChanged"
->
+        WindowStyle="None"
+        Background="Transparent"
+        AllowsTransparency="True"
+        IsVisibleChanged="Window_IsVisibleChanged">
+    
     <Window.DataContext>
         <viewModel:ServiceViewModel></viewModel:ServiceViewModel>
     </Window.DataContext>
+    
+    <!--#REGION BORDER - BACKGROUND -->
+    <Border CornerRadius="10" BorderThickness="1">
+        <Border.BorderBrush>
+            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1" >
+                <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="0.75"/>
+                <GradientStop Color="{StaticResource secondaryBackColor2}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.BorderBrush>
+
+        <Border.Background>
+            <LinearGradientBrush StartPoint="1,1" EndPoint="0,0">
+                <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
+                <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1"/>
+            </LinearGradientBrush>
+        </Border.Background>
+        <!--#ENDREGION BORDER-->
     
     <Grid>
         <Grid.RowDefinitions>
@@ -24,9 +45,26 @@
             <RowDefinition Height="2*"></RowDefinition>
         </Grid.RowDefinitions>
 
-        <Label VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Content="Servicio educativo"></Label>
+            <StackPanel>
+                <StackPanel Orientation="Horizontal" 
+                            Height="30"  
+                            Grid.Row="0"
+                            Margin="0,20,0,0"
+                            HorizontalAlignment="Center">   
+                    <fa:IconImage Icon="GraduationCap" Foreground="{StaticResource color5}" 
+                      Height="25" Width="25"/>
+                    <Label VerticalAlignment="Center" 
+                            HorizontalAlignment="Center" 
+                            Content="Servicio Educativo"
+                            Foreground="{StaticResource titleColor2}"
+                            FontSize="20"
+                            FontFamily="Montserrat"
+                            Margin="0,0,10,0"
+                            Padding="10,5,10,5"></Label>
+                </StackPanel>
+            </StackPanel>
 
-        <Grid Grid.Row="1">
+            <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"></ColumnDefinition>
                 <ColumnDefinition Width="4*"></ColumnDefinition>
@@ -38,18 +76,45 @@
                 <RowDefinition Height="1*"></RowDefinition>
                 <RowDefinition Height="1*"></RowDefinition>
             </Grid.RowDefinitions>
-            <Label Grid.Column="0" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Clave"></Label>
-            <Label Grid.Column="0" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="20,0,0,0" Content="Comunidad"></Label>
 
-            <TextBox 
-                Grid.Column="1" 
-                Grid.Row="0" 
-                VerticalAlignment="Center" 
-                Margin="0,0,10,0" 
-                MaxLines="1" 
-                Name="TxtCode"
-                Text="{Binding Service.Code, UpdateSourceTrigger=PropertyChanged}"
-            ></TextBox>
+
+                <Label Grid.Column="0" Grid.Row="0" 
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           Margin="20,0,0,0" 
+                           Content="Clave"
+                           Foreground="{StaticResource titleColor3}"
+                           FontFamily="Montserrat"
+                           FontSize="14">
+                </Label>
+                <Label Grid.Column="0" Grid.Row="1"
+                           VerticalAlignment="Center" 
+                           HorizontalAlignment="Left" 
+                           Margin="20,0,0,0"
+                           Padding="0,0,5,0"
+                           Content="Comunidad"
+                           Foreground="{StaticResource titleColor3}"
+                           FontFamily="Montserrat"
+                           FontSize="14">
+                </Label>
+
+                <TextBox Grid.Column="1" Grid.Row="0" 
+                     VerticalAlignment="Center" 
+                     Margin="0,0,10,0" 
+                     MaxLines="1" 
+                     Name="TxtCode"
+                     Text="{Binding Service.Code, UpdateSourceTrigger=PropertyChanged}"
+                     FontSize="15"
+                     FontFamily="Montserrat"
+                     FontWeight="Light"
+                     Background="Transparent"
+                     Foreground="{StaticResource titleColor3}"
+                     CaretBrush="{StaticResource titleColor3}"
+                     BorderBrush="{StaticResource color5}"
+                     BorderThickness="0,0,0,1"
+                     Height="28"
+                     VerticalContentAlignment="Center">
+                </TextBox>
             
             <ComboBox 
                 Grid.Column="1" 
@@ -74,9 +139,33 @@
                 Visibility="Hidden"
             ></TextBox>
 
-            <Label Grid.Column="2" Grid.Row="0" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Programa"></Label>
-            <Label Grid.Column="2" Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Ciclo escolar"></Label>
-            <Label Grid.Column="2" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="10,0,0,0" Content="Estatus"></Label>
+            <Label Grid.Column="2" Grid.Row="0" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Left" 
+                   Margin="10,0,0,0" 
+                   Content="Programa"
+                   Foreground="{StaticResource titleColor3}"
+                   FontFamily="Montserrat"
+                   FontSize="14">
+            </Label>
+            <Label Grid.Column="2" Grid.Row="1" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Left" 
+                   Margin="10,0,0,0" 
+                   Content="Ciclo escolar"
+                   Foreground="{StaticResource titleColor3}"
+                   FontFamily="Montserrat"
+                   FontSize="14">
+            </Label>
+            <Label Grid.Column="2" Grid.Row="2" 
+                   VerticalAlignment="Center" 
+                   HorizontalAlignment="Left" 
+                   Margin="10,0,0,0" 
+                   Content="Estatus"
+                   Foreground="{StaticResource titleColor3}"
+                   FontFamily="Montserrat"
+                   FontSize="14">
+            </Label>
 
             <ComboBox 
                 Grid.Column="3" 
@@ -128,10 +217,14 @@
         </Grid>
 
         <WrapPanel Grid.Row="2" HorizontalAlignment="Right" VerticalAlignment="Center">
-            <Button Margin="10" Padding="10" Name="BtnCancel" Click="BtnCancel_Click">Cancelar</Button>
-            <Button Margin="10" Padding="10" Name="BtnCreate" Command="{Binding AddCommand}" Click="BtnStore_Click">Guardar</Button>
-            <Button Margin="10" Padding="10" Name="BtnUpdate" Command="{Binding UpdateCommand}" Click="BtnStore_Click">Guardar</Button>
+            <Button Margin="10" Padding="10" Name="BtnCancel" Click="BtnCancel_Click"
+                    Style="{StaticResource controlButtonServices}">Cancelar</Button>
+            <Button Margin="10" Padding="10" Name="BtnCreate" Command="{Binding AddCommand}" Click="BtnStore_Click"
+                    Style="{StaticResource controlButtonServices}">Guardar</Button>
+            <Button Margin="10" Padding="10" Name="BtnUpdate" Command="{Binding UpdateCommand}" Click="BtnStore_Click"
+                    Style="{StaticResource controlButtonServices}">Guardar</Button>
         </WrapPanel>
     </Grid>
+    </Border>
 </Window>
 
