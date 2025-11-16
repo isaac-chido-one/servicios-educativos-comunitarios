@@ -85,16 +85,6 @@ namespace ServiciosEducativosComunitarios.View
             }
         }
 
-        private void MenuNewLocality_Click(object sender, RoutedEventArgs e)
-        {
-            this.localityView.ShowNew();
-        }
-
-        private void MenuNewService_Click(object sender, RoutedEventArgs e)
-        {
-            this.servicesView.Show();
-        }
-
         [DllImport("user32.dll")]
         public static extern IntPtr SendMessage(IntPtr hWnd, int wMsg, int wParam, int lParam);
 
@@ -234,6 +224,63 @@ namespace ServiciosEducativosComunitarios.View
             {
                 this.localityView.ShowEdit(localityModel);
             }
+        }
+
+        // Manejador para eliminar filas con la tecla Delete en el DataGrid
+        private async void DataGridLocalities_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Delete)
+            {
+                return;
+            }
+
+            var selected = this.DataGridLocalities.SelectedItems.Cast<object>().ToList();
+            if (selected == null || selected.Count == 0)
+            {
+                return;
+            }
+
+            LocalityModel? localityModel = selected.OfType<LocalityModel>().First();
+
+            if (localityModel == null || localityModel.Id == 0)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            LocalityRepository localityRepository = new LocalityRepository();
+            List<string> errors = new List<string>();
+
+            // Ejecutar en hilo de fondo las eliminaciones en BD
+            await Task.Run(() =>
+            {
+                try
+                {
+                    localityRepository.Delete(localityModel);
+                }
+                catch (System.Exception ex)
+                {
+                    lock (errors)
+                    {
+                        errors.Add($"Id {localityModel.Id}: {ex.Message}");
+                    }
+                }
+            });
+
+            if (errors.Any())
+            {
+                MessageBox.Show($"No se pudo eliminar la localidad:\n{string.Join("\n", errors)}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+
+            // Recargar catálogo para reflejar cambios
+            _ = LoadLocalitiesAsync(true);
+
+            // Evitar que el DataGrid intente aplicar su propia lógica de borrado
+            e.Handled = true;
         }
     }
 }

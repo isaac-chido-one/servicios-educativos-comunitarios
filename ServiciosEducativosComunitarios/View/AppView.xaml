@@ -246,37 +246,132 @@
                             Grid.Column="0" 
                             Grid.Row="1" 
                             Name="DataGridLocalities"
-                            CanUserAddRows="False"
-                            CanUserDeleteRows="False"
+                            CanUserAddRows="True"
+                            CanUserDeleteRows="True"
+                            PreviewKeyDown="DataGridLocalities_PreviewKeyDown"
+                            HorizontalAlignment="Stretch"
                         >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Clave" Binding="{Binding Code}"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Clave" Binding="{Binding Code}" Width="*"></DataGridTextColumn>
+
                                 <DataGridTemplateColumn Header="Municipio">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Municipio, Converter={StaticResource IdToNameConverter}, ConverterParameter=Municipio}"/>
+                                            <ComboBox 
+                                                VerticalAlignment="Center" 
+                                                Margin="5,0,5,0"
+                                                Name="ComboMunicipio"
+                                                SelectedValuePath="Tag"
+                                                SelectedValue="{Binding Municipio, TargetNullValue=0}"
+                                            >
+                                                <ComboBoxItem Tag="0" Content="Seleccionar..." IsSelected="True"></ComboBoxItem>
+                                                <ComboBoxItem Tag="1" Content="Apozol"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2" Content="Apulco"></ComboBoxItem>
+                                                <ComboBoxItem Tag="3" Content="Atolinga"></ComboBoxItem>
+                                                <ComboBoxItem Tag="4" Content="Benito Juárez"></ComboBoxItem>
+                                                <ComboBoxItem Tag="5" Content="Calera"></ComboBoxItem>
+                                                <ComboBoxItem Tag="6" Content="Cañitas de Felipe Pescador"></ComboBoxItem>
+                                                <ComboBoxItem Tag="7" Content="Concepción del Oro"></ComboBoxItem>
+                                                <ComboBoxItem Tag="8" Content="Cuauhtémoc"></ComboBoxItem>
+                                                <ComboBoxItem Tag="9" Content="Chalchihuites"></ComboBoxItem>
+                                                <ComboBoxItem Tag="10" Content="Fresnillo"></ComboBoxItem>
+                                                <ComboBoxItem Tag="11" Content="Trinidad García de la Cadena"></ComboBoxItem>
+                                                <ComboBoxItem Tag="12" Content="Genaro Codina"></ComboBoxItem>
+                                                <ComboBoxItem Tag="13" Content="General Enrique Estrada"></ComboBoxItem>
+                                                <ComboBoxItem Tag="14" Content="General Francisco R. Murguía"></ComboBoxItem>
+                                                <ComboBoxItem Tag="15" Content="El Plateado de Joaquín Amaro"></ComboBoxItem>
+                                                <ComboBoxItem Tag="16" Content="General Pánfilo Natera"></ComboBoxItem>
+                                                <ComboBoxItem Tag="17" Content="Guadalupe"></ComboBoxItem>
+                                                <ComboBoxItem Tag="18" Content="Huanusco"></ComboBoxItem>
+                                                <ComboBoxItem Tag="19" Content="Jalpa"></ComboBoxItem>
+                                                <ComboBoxItem Tag="20" Content="Jerez"></ComboBoxItem>
+                                                <ComboBoxItem Tag="21" Content="Jiménez del Teul"></ComboBoxItem>
+                                                <ComboBoxItem Tag="22" Content="Juan Aldama"></ComboBoxItem>
+                                                <ComboBoxItem Tag="23" Content="Juchipila"></ComboBoxItem>
+                                                <ComboBoxItem Tag="24" Content="Loreto"></ComboBoxItem>
+                                                <ComboBoxItem Tag="25" Content="Luis Moya"></ComboBoxItem>
+                                                <ComboBoxItem Tag="26" Content="Mazapil"></ComboBoxItem>
+                                                <ComboBoxItem Tag="27" Content="Melchor Ocampo"></ComboBoxItem>
+                                                <ComboBoxItem Tag="28" Content="Mezquital del Oro"></ComboBoxItem>
+                                                <ComboBoxItem Tag="29" Content="Miguel Auza"></ComboBoxItem>
+                                                <ComboBoxItem Tag="30" Content="Momax"></ComboBoxItem>
+                                                <ComboBoxItem Tag="31" Content="Monte Escobedo"></ComboBoxItem>
+                                                <ComboBoxItem Tag="32" Content="Morelos"></ComboBoxItem>
+                                                <ComboBoxItem Tag="33" Content="Moyahua de Estrada"></ComboBoxItem>
+                                                <ComboBoxItem Tag="34" Content="Nochistlán de Mejía"></ComboBoxItem>
+                                                <ComboBoxItem Tag="35" Content="Noria de Ángeles"></ComboBoxItem>
+                                                <ComboBoxItem Tag="36" Content="Ojocaliente"></ComboBoxItem>
+                                                <ComboBoxItem Tag="37" Content="Pánuco"></ComboBoxItem>
+                                                <ComboBoxItem Tag="38" Content="Pinos"></ComboBoxItem>
+                                                <ComboBoxItem Tag="39" Content="Río Grande"></ComboBoxItem>
+                                                <ComboBoxItem Tag="40" Content="Sain Alto"></ComboBoxItem>
+                                                <ComboBoxItem Tag="41" Content="El Salvador"></ComboBoxItem>
+                                                <ComboBoxItem Tag="58" Content="Santa María de la Paz"></ComboBoxItem>
+                                                <ComboBoxItem Tag="42" Content="Sombrerete"></ComboBoxItem>
+                                                <ComboBoxItem Tag="43" Content="Susticacán"></ComboBoxItem>
+                                                <ComboBoxItem Tag="44" Content="Tabasco"></ComboBoxItem>
+                                                <ComboBoxItem Tag="45" Content="Tepechitlán"></ComboBoxItem>
+                                                <ComboBoxItem Tag="46" Content="Tepetongo"></ComboBoxItem>
+                                                <ComboBoxItem Tag="47" Content="Teúl de González Ortega"></ComboBoxItem>
+                                                <ComboBoxItem Tag="48" Content="Tlaltenango de Sánchez Román"></ComboBoxItem>
+                                                <ComboBoxItem Tag="57" Content="Trancoso"></ComboBoxItem>
+                                                <ComboBoxItem Tag="49" Content="Valparaíso"></ComboBoxItem>
+                                                <ComboBoxItem Tag="50" Content="Vetagrande"></ComboBoxItem>
+                                                <ComboBoxItem Tag="51" Content="Villa de Cos"></ComboBoxItem>
+                                                <ComboBoxItem Tag="52" Content="Villa García"></ComboBoxItem>
+                                                <ComboBoxItem Tag="53" Content="Villa González Ortega"></ComboBoxItem>
+                                                <ComboBoxItem Tag="54" Content="Villa Hidalgo"></ComboBoxItem>
+                                                <ComboBoxItem Tag="55" Content="Villanueva"></ComboBoxItem>
+                                                <ComboBoxItem Tag="56" Content="Zacatecas"></ComboBoxItem>
+                                            </ComboBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Comunidad" Binding="{Binding Comunidad}"></DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Comunidad" Binding="{Binding Comunidad}" Width="*"></DataGridTextColumn>
+                                
                                 <DataGridTemplateColumn Header="Ámbito">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Ambito, Converter={StaticResource IdToNameConverter}, ConverterParameter=Ambito}"/>
+                                            <ComboBox 
+                                                VerticalAlignment="Center" 
+                                                Margin="0,0,3,3" 
+                                                Name="ComboScope"
+                                                SelectedValuePath="Tag"
+                                                SelectedValue="{Binding Ambito, TargetNullValue=0}"
+                                            >
+                                                <ComboBoxItem Tag="0" Content="Seleccionar..."></ComboBoxItem>
+                                                <ComboBoxItem Tag="1" Content="Rural"></ComboBoxItem>
+                                                <ComboBoxItem Tag="1" Content="Urbano"></ComboBoxItem>
+                                            </ComboBox>
+
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTextColumn Header="Latitud" Binding="{Binding Latitud}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Longitud" Binding="{Binding Longitud}"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Población" Binding="{Binding Poblacion}"></DataGridTextColumn>
-                                <DataGridTemplateColumn Header="">
+
+                                <DataGridTextColumn Header="Latitud" Binding="{Binding Latitud}" Width="*"></DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Longitud" Binding="{Binding Longitud}" Width="*"></DataGridTextColumn>
+
+                                <DataGridTextColumn Header="Población" Binding="{Binding Poblacion}" Width="*"></DataGridTextColumn>
+
+                                <DataGridTemplateColumn Header="" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonEditLocality_Click" Margin="3">Editar</Button>
+                                            <Button Tag="{Binding Id}" ToolTip="Guardar" Margin="3" Name="ButtonLocalityStore">Guardar</Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
-                                <DataGridTemplateColumn Header="">
+
+                                <DataGridTemplateColumn Header="" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <Button Tag="{Binding Id}" ToolTip="Editar" Click="ButtonEditLocality_Click" Margin="3">Editar</Button>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
+                                <DataGridTemplateColumn Header="" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <Button Tag="{Binding Id}" ToolTip="Eliminar" Click="ButtonDeleteLocality_Click" Margin="3">Eliminar</Button>
@@ -308,6 +403,7 @@
                             Name="DataGridServices"
                             CanUserAddRows="False"
                             CanUserDeleteRows="False"
+                            SelectionMode="Single"
                         >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Clave" Binding="{Binding Code}"></DataGridTextColumn>
@@ -351,46 +447,8 @@
                         </DataGrid>
                     </Grid>
 
-
-
                 </Grid>
             </Border>
         </Grid>
     </Border>
-
-
-
-
-
-
-
-
-
-
-
-
-    <!-- <DockPanel>
-        <Menu DockPanel.Dock="Top">
-            <MenuItem Header="Localidades INEGI">
-                <MenuItem Header="Ver" IsEnabled="False" />
-                <MenuItem Header="Nuevo ..." Name="MenuNewLocality" Click="MenuNewLocality_Click" />
-                <MenuItem Header="Editar ..." IsEnabled="False" />
-                <MenuItem Header="Exportar" IsEnabled="False">
-                    <MenuItem Header="Excel" IsEnabled="False" />
-                    <MenuItem Header="PDF" IsEnabled="False" />
-                </MenuItem>
-                <MenuItem Header="Eliminar" IsEnabled="False" />
-            </MenuItem>
-            <MenuItem Header="Servicios educativos">
-                <MenuItem Header="Ver" IsEnabled="False" />
-                <MenuItem Header="Nuevo ..." Name="MenuNewService" Click="MenuNewService_Click" />
-                <MenuItem Header="Editar ..." IsEnabled="False" />
-                <MenuItem Header="Exportar" IsEnabled="False">
-                    <MenuItem Header="Excel" IsEnabled="False" />
-                    <MenuItem Header="PDF" IsEnabled="False" />
-                </MenuItem>
-                <MenuItem Header="Eliminar" IsEnabled="False" />
-            </MenuItem>
-        </Menu>
-    </DockPanel> -->
 </Window>

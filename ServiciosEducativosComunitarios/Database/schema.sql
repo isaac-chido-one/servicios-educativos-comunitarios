@@ -8,7 +8,7 @@ CREATE TABLE [dbo].[User](
  CONSTRAINT [PK_User] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
-);
+));
 
 CREATE TABLE [dbo].[Locality](
 	[id] INT IDENTITY(1,1) NOT NULL,
