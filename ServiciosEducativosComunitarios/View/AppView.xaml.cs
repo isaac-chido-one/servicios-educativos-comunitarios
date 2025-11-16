@@ -148,16 +148,6 @@ namespace ServiciosEducativosComunitarios.View
             }
         }
 
-        private void RadioButtonNotifications_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.RadioButtonNotifications.IsChecked == true)
-            {
-                this.ContentControlMain.Visibility = Visibility.Visible;
-                this.GridLocalities.Visibility = Visibility.Collapsed;
-                this.GridServices.Visibility = Visibility.Collapsed;
-            }
-        }
-
         private void ButtonNewLocality_Click(object sender, RoutedEventArgs e)
         {
             this.localityView.ShowNew();
@@ -168,7 +158,7 @@ namespace ServiciosEducativosComunitarios.View
             this.servicesView.ShowNew();
         }
 
-        private void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
+        private async void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
         {
             Button button = (Button)sender;
 
@@ -178,9 +168,12 @@ namespace ServiciosEducativosComunitarios.View
                 int id = int.Parse(tag);
                 LocalityModel localityModel = new LocalityModel { Id = id };
                 var repo = new LocalityRepository();
-                Task.Run(() => repo.Delete(localityModel));
+                await Task.Run(() =>
+                {
+                    repo.Delete(localityModel);
+                });
+                _ = LoadLocalitiesAsync(false);
                 MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                _ = LoadLocalitiesAsync(true);
             }
             catch (Exception ex)
             {
@@ -193,8 +186,8 @@ namespace ServiciosEducativosComunitarios.View
 
             try
             {
-                string tag = button.Tag.ToString();
-                int id = int.Parse(tag);
+                string? tag = button.Tag.ToString();
+                int id = tag == null ? 0 : int.Parse(tag);
                 ServiceModel serviceModel = new ServiceModel { Id = id };
                 var repo = new ServiceRepository();
                 Task.Run(() => repo.Delete(serviceModel));
@@ -267,6 +260,12 @@ namespace ServiciosEducativosComunitarios.View
                 }
             });
 
+            // Evitar que el DataGrid intente aplicar su propia lógica de borrado
+            e.Handled = true;
+
+            // Recargar catálogo para reflejar cambios
+            _ = LoadLocalitiesAsync(false);
+
             if (errors.Any())
             {
                 MessageBox.Show($"No se pudo eliminar la localidad:\n{string.Join("\n", errors)}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
@@ -275,12 +274,6 @@ namespace ServiciosEducativosComunitarios.View
             {
                 MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-
-            // Recargar catálogo para reflejar cambios
-            _ = LoadLocalitiesAsync(true);
-
-            // Evitar que el DataGrid intente aplicar su propia lógica de borrado
-            e.Handled = true;
         }
     }
 }
