@@ -84,7 +84,8 @@ namespace ServiciosEducativosComunitarios.Repositories
                             Locality = reader.IsDBNull(3) ? null : reader.GetString(3),
                             Period = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
                             Program = reader.IsDBNull(5) ? 0 : reader.GetInt32(5),
-                            Status = reader.IsDBNull(6) ? 0 : reader.GetInt32(6)
+                            Status = reader.IsDBNull(6) ? 0 : reader.GetInt32(6),
+                            IsDirty = false
                         };
 
                         services.Add(service);
@@ -95,6 +96,23 @@ namespace ServiciosEducativosComunitarios.Repositories
             }
 
             return services;
+        }
+
+        public bool CodeExists(ServiceModel serviceModel)
+        {
+            bool exists = false;
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT * FROM  [Service] WHERE [Id] != @id AND [Code] = @code";
+                command.Parameters.AddWithValue("@id", serviceModel.Id);
+                command.Parameters.AddWithValue("@code", serviceModel.Code);
+                exists = command.ExecuteScalar() != null;
+            }
+
+            return exists;
         }
     }
 }

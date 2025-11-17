@@ -94,15 +94,15 @@ namespace ServiciosEducativosComunitarios.Repositories
             }
         }
 
-        public UserModel GetByUsername(string username)
+        public UserModel? GetByUsername(string username)
         {
-            UserModel user = null;
+            UserModel? user = null;
             using (var connection = GetConnection())
             using (var command = new SqlCommand())
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "select *from [User] where username=@username";
+                command.CommandText = "select * from [User] where username = @username";
                 command.Parameters.Add("@username", SqlDbType.NVarChar).Value = username;
                 using (var reader = command.ExecuteReader())
                 {
@@ -120,6 +120,7 @@ namespace ServiciosEducativosComunitarios.Repositories
                     }
                 }
             }
+
             return user;
         }
     }

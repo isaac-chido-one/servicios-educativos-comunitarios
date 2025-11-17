@@ -9,15 +9,25 @@ namespace ServiciosEducativosComunitarios.Model
 {
     public class LocalityModel : INotifyPropertyChanged
     {
-        private int _id;
+        private int _id = 0;
+
         private string? _code;
-        private int _municipio;
+
+        private int _municipio = 0;
+
         private string? _comunidad;
-        private int _ambito;
+
+        private int _ambito = 0;
+
         private string? _latitud;
+
         private string? _longitud;
-        private int _poblacion;
-        private bool _isDirty;
+
+        private int _poblacion = 0;
+
+        private bool _isDirty = false;
+
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public int Id
         {
@@ -73,7 +83,11 @@ namespace ServiciosEducativosComunitarios.Model
             get => _isDirty;
             set
             {
-                if (_isDirty == value) return;
+                if (_isDirty == value)
+                {
+                    return;
+                }
+
                 _isDirty = value;
                 OnPropertyChanged(nameof(IsDirty));
             }
@@ -87,7 +101,11 @@ namespace ServiciosEducativosComunitarios.Model
 
         protected void SetProperty<T>(ref T field, T value, string propertyName)
         {
-            if (Equals(field, value)) return;
+            if (Equals(field, value))
+            {
+                return;
+            }
+
             field = value;
             // Cuando una propiedad cambia marcamos IsDirty = true
             // (si la entidad se acaba de crear y Id==0 -> también será true mientras se edita)
@@ -95,8 +113,6 @@ namespace ServiciosEducativosComunitarios.Model
             OnPropertyChanged(propertyName);
         }
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        protected void OnPropertyChanged(string propertyName) =>
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        protected void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

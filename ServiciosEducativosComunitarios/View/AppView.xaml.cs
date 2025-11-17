@@ -2,6 +2,8 @@
 using ServiciosEducativosComunitarios.Model;
 using ServiciosEducativosComunitarios.Repositories;
 using ServiciosEducativosComunitarios.ViewModel;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Media;
 using System.Runtime;
 using System.Runtime.InteropServices;
@@ -25,34 +27,27 @@ namespace ServiciosEducativosComunitarios.View
     /// </summary>
     public partial class AppView : Window
     {
-        protected ServicesView servicesView;
         public AppView()
         {
             InitializeComponent();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            this.servicesView = new ServicesView(this);
-            loadCatalogues(false);
+            LoadCatalogues();
         }
-        public void loadCatalogues(bool esperar)
+        private void LoadCatalogues()
         {
             // Cargar localities y servicios desde el repositorio sin bloquear la UI
-            _ = LoadLocalitiesAsync(esperar);
-            _ = LoadServicesAsync(esperar);
+            _ = LoadLocalitiesAsync();
+            _ = LoadServicesAsync();
         }
 
-        private async Task LoadLocalitiesAsync(bool esperar = false)
+        private async Task LoadLocalitiesAsync()
         {
             this.LabelLocalityWarning.Text = "";
             this.LabelLocalityWarning.Visibility = Visibility.Collapsed;
 
-            if (esperar)
-            {
-                await Task.Delay(1000);
-            }
-
             try
             {
-                var repo = new LocalityRepository();
+                LocalityRepository repo = new LocalityRepository();
                 // Ejecuta la consulta en un hilo de fondo
                 var localities = await Task.Run(() => repo.GetAll().ToList());
                 // Asigna el ItemsSource en el hilo de la UI
@@ -60,21 +55,15 @@ namespace ServiciosEducativosComunitarios.View
             }
             catch (System.Exception ex)
             {
-                // Manejo simple: mostrar mensaje. Cambiar por logging si procede.
-                MessageBox.Show($"Error cargando localidades: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowLocalityWarning($"Error cargando localidades: {ex.Message}");
             }
         }
 
-        private async Task LoadServicesAsync(bool esperar)
+        private async Task LoadServicesAsync()
         {
-            if (esperar)
-            {
-                await Task.Delay(1000);
-            }
-
             try
             {
-                var repo = new ServiceRepository();
+                ServiceRepository repo = new ServiceRepository();
                 // Ejecuta la consulta en un hilo de fondo
                 var services = await Task.Run(() => repo.GetAll().ToList());
                 // Asigna el ItemsSource en el hilo de la UI
@@ -82,8 +71,7 @@ namespace ServiciosEducativosComunitarios.View
             }
             catch (System.Exception ex)
             {
-                // Manejo simple: mostrar mensaje. Cambiar por logging si procede.
-                MessageBox.Show($"Error cargando servicios: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowServiceWarning($"Error cargando servicios: {ex.Message}");
             }
         }
 
@@ -152,64 +140,95 @@ namespace ServiciosEducativosComunitarios.View
 
         private void ButtonNewService_Click(object sender, RoutedEventArgs e)
         {
-            this.servicesView.ShowNew();
+            List<ServiceModel> services = (List<ServiceModel>)this.DataGridServices.ItemsSource;
+            services.Insert(0, new ServiceModel
+            {
+                Id = 0,
+                Code = string.Empty,
+                LocalityId = 0,
+                Locality = string.Empty,
+                Period = 0,
+                Program = 0,
+                Status = 0,
+                IsDirty = false
+            });
+            this.DataGridServices.ItemsSource = null;
+            this.DataGridServices.ItemsSource = services;
         }
 
         private async void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
+            if (sender is not Button button || button.DataContext is not LocalityModel localityModel)
+            {
+                return;
+            }
+
+            if (localityModel.Id == 0)
+            {
+                List<LocalityModel> localities = (List<LocalityModel>)this.DataGridLocalities.ItemsSource;
+                localities.Remove(localityModel);
+                this.DataGridLocalities.ItemsSource = null;
+                this.DataGridLocalities.ItemsSource = localities;
+                return;
+            }
 
             try
             {
-                string tag = button.Tag.ToString();
-                int id = int.Parse(tag);
-                LocalityModel localityModel = new LocalityModel { Id = id };
-                var repo = new LocalityRepository();
-                await Task.Run(() =>
-                {
-                    repo.Delete(localityModel);
-                });
-                _ = LoadLocalitiesAsync();
-                MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+                LocalityRepository repo = new LocalityRepository();
+                await Task.Run(() => repo.Delete(localityModel));
             }
             catch (Exception ex)
             {
+                ShowLocalityWarning($"Error al eliminar localidad: {ex.Message}");
+                return;
             }
+
+            _ = LoadLocalitiesAsync();
+            MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ButtonDeleteService_Click(object sender, RoutedEventArgs e)
+        private async void ButtonDeleteService_Click(object sender, RoutedEventArgs e)
         {
-            Button button = (Button)sender;
+            if (sender is not Button button || button.DataContext is not ServiceModel serviceModel)
+            {
+                return;
+            }
+
+            if (serviceModel.Id == 0)
+            {
+                List<ServiceModel> services = (List<ServiceModel>)this.DataGridServices.ItemsSource;
+                services.Remove(serviceModel);
+                this.DataGridServices.ItemsSource = null;
+                this.DataGridServices.ItemsSource = services;
+                return;
+            }
 
             try
             {
-                string? tag = button.Tag.ToString();
-                int id = tag == null ? 0 : int.Parse(tag);
-                ServiceModel serviceModel = new ServiceModel { Id = id };
-                var repo = new ServiceRepository();
-                Task.Run(() => repo.Delete(serviceModel));
-                MessageBox.Show("Servicio eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-                _ = LoadServicesAsync(true);
+                ServiceRepository repo = new ServiceRepository();
+                await Task.Run(() => repo.Delete(serviceModel));
             }
             catch (Exception ex)
             {
+                ShowServiceWarning($"Error al eliminar servicio: {ex.Message}");
+                return;
             }
-        }
 
-        private void ButtonEditService_Click(object sender, RoutedEventArgs e)
-        {
-            Button button = (Button)sender;
-
-            if (button.DataContext is ServiceModel serviceModel)
-            {
-                this.servicesView.ShowEdit(serviceModel);
-            }
+            _ = LoadServicesAsync();
+            MessageBox.Show("Servicio eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ShowLocalityWarning(string message)
         {
-            this.LabelLocalityWarning.Text = message;
+            this.LabelLocalityWarning.Text = "▲ " + message;
             this.LabelLocalityWarning.Visibility = Visibility.Visible;
+            SystemSounds.Beep.Play();
+        }
+
+        private void ShowServiceWarning(string message)
+        {
+            this.LabelServiceWarning.Text = "▲ " + message;
+            this.LabelServiceWarning.Visibility = Visibility.Visible;
             SystemSounds.Beep.Play();
         }
 
@@ -281,7 +300,7 @@ namespace ServiciosEducativosComunitarios.View
 
             try
             {
-                var repo = new LocalityRepository();
+                LocalityRepository repo = new LocalityRepository();
                 bool codeExists = await Task.Run(() => repo.CodeExists(locality));
 
                 if (codeExists)
@@ -328,8 +347,18 @@ namespace ServiciosEducativosComunitarios.View
 
             LocalityModel? localityModel = selected.OfType<LocalityModel>().First();
 
-            if (localityModel == null || localityModel.Id == 0)
+            if (localityModel == null)
             {
+                e.Handled = true;
+                return;
+            }
+
+            if (localityModel.Id == 0)
+            {
+                List<LocalityModel> localities = (List<LocalityModel>)this.DataGridLocalities.ItemsSource;
+                localities.Remove(localityModel);
+                this.DataGridLocalities.ItemsSource = null;
+                this.DataGridLocalities.ItemsSource = localities;
                 e.Handled = true;
                 return;
             }
@@ -367,6 +396,175 @@ namespace ServiciosEducativosComunitarios.View
             {
                 MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
             }
+        }
+
+        private async void DataGridServices_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key != Key.Delete)
+            {
+                return;
+            }
+
+            var selected = this.DataGridServices.SelectedItems.Cast<object>().ToList();
+            if (selected == null || selected.Count == 0)
+            {
+                return;
+            }
+
+            ServiceModel? serviceModel = selected.OfType<ServiceModel>().First();
+
+            if (serviceModel == null)
+            {
+                e.Handled = true;
+                return;
+            }
+
+            if (serviceModel.Id == 0)
+            {
+                List<ServiceModel> services = (List<ServiceModel>)this.DataGridServices.ItemsSource;
+                services.Remove(serviceModel);
+                this.DataGridServices.ItemsSource = null;
+                this.DataGridServices.ItemsSource = services;
+                e.Handled = true;
+                return;
+            }
+
+            ServiceRepository serviceRepository = new ServiceRepository();
+            List<string> errors = new List<string>();
+
+            // Ejecutar en hilo de fondo las eliminaciones en BD
+            await Task.Run(() =>
+            {
+                try
+                {
+                    serviceRepository.Delete(serviceModel);
+                }
+                catch (System.Exception ex)
+                {
+                    lock (errors)
+                    {
+                        errors.Add($"Id {serviceModel.Id}: {ex.Message}");
+                    }
+                }
+            });
+
+            // Evitar que el DataGrid intente aplicar su propia lógica de borrado
+            e.Handled = true;
+
+            // Recargar catálogo para reflejar cambios
+            _ = LoadServicesAsync();
+
+            if (errors.Any())
+            {
+                ShowServiceWarning($"No se pudo eliminar el servicio: {string.Join("\n", errors)}");
+            }
+            else
+            {
+                MessageBox.Show("Servicio eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+        }
+
+        private async void ButtonServiceStore_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button)
+            {
+                return;
+            }
+
+            if (button.DataContext is not ServiceModel service)
+            {
+                ShowServiceWarning("Ingesa la información del servicio");
+                return;
+            }
+
+            if (String.IsNullOrEmpty(service.Code))
+            {
+                ShowServiceWarning("Ingesa un código de servicio");
+                return;
+            }
+
+            string alphanumericPattern = @"^[a-zA-Z0-9]+$";
+
+            if (!Regex.IsMatch(service.Code, alphanumericPattern))
+            {
+                ShowServiceWarning("El formato del código no es alfanumérico");
+                return;
+            }
+
+            if (service.LocalityId == 0)
+            {
+                ShowServiceWarning("Selecciona una localidad");
+                return;
+            }
+
+            if (service.Period == 0)
+            {
+                ShowServiceWarning("Selecciona un periodo");
+                return;
+            }
+
+            if (service.Program == 0)
+            {
+                ShowServiceWarning("Selecciona un programa");
+                return;
+            }
+
+            if (service.Status == 0)
+            {
+                ShowServiceWarning("Selecciona un estatus");
+                return;
+            }
+
+            try
+            {
+                ServiceRepository repo = new ServiceRepository();
+                bool codeExists = await Task.Run(() => repo.CodeExists(service));
+
+                if (codeExists)
+                {
+                    ShowServiceWarning("El código del servicio ya existe. Ingresa otro.");
+                    return;
+                }
+
+                if (service.Id == 0)
+                {
+                    // Nuevo registro
+                    await Task.Run(() => repo.Add(service));
+                }
+                else
+                {
+                    // Registro existente
+                    await Task.Run(() => repo.Update(service));
+                }
+
+                // Después de guardar, marcar como no modificado y refrescar catálogo
+                service.AcceptChanges();
+                _ = LoadServicesAsync();
+                MessageBox.Show("Servicio guardado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                ShowServiceWarning($"Error al guardar el servicio: {ex.Message}");
+            }
+        }
+
+        private void ButtonNewLocality_Click(object sender, RoutedEventArgs e)
+        {
+            List<LocalityModel> localities = (List<LocalityModel>)this.DataGridLocalities.ItemsSource;
+            localities.Insert(0, new LocalityModel
+            {
+                Id = 0,
+                Code = string.Empty,
+                Municipio = 0,
+                Comunidad = string.Empty,
+                Ambito = 0,
+                Latitud = string.Empty,
+                Longitud = string.Empty,
+                Poblacion = 0,
+                IsDirty = false
+            });
+            this.DataGridLocalities.ItemsSource = null;
+            this.DataGridLocalities.ItemsSource = localities;
         }
     }
 }

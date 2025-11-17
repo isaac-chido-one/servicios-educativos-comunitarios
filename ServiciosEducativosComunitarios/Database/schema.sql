@@ -31,3 +31,15 @@ CREATE TABLE [dbo].[Service](
 	[status] INT NULL,
 	PRIMARY KEY CLUSTERED([id] ASC)
 );
+
+INSERT INTO [dbo].[User] (
+	[Id],
+	[Username],
+	[Password],
+	[Name],
+	[LastName],
+	[Email]
+) VALUES
+(NEWID(), 'pduenas', '123456', 'Perla', 'Dueñas', 'pduenas@yopmail.com'),
+(NEWID(), 'hortiz' , '123456', 'Herón', 'Ortiz' , 'hortiz@yopmail.com'),
+(NEWID(), 'irojas' , '123456', 'Isaac', 'Rojas' , 'irojas@yopmail.com');

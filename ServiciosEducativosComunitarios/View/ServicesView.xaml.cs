@@ -21,13 +21,10 @@ namespace ServiciosEducativosComunitarios.View
     /// </summary>
     public partial class ServicesView : Window
     {
-        private readonly AppView appView;
-
         private ServiceModel? serviceModel;
 
-        public ServicesView(AppView appView)
+        public ServicesView()
         {
-            this.appView = appView;
             InitializeComponent();
         }
 
@@ -49,7 +46,6 @@ namespace ServiciosEducativosComunitarios.View
         private void BtnStore_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Collapsed;
-            appView.loadCatalogues(true);
         }
 
         private void Window_IsVisibleChanged(object sender, DependencyPropertyChangedEventArgs e)
