@@ -2,9 +2,11 @@
 using ServiciosEducativosComunitarios.Model;
 using ServiciosEducativosComunitarios.Repositories;
 using ServiciosEducativosComunitarios.ViewModel;
+using System.Media;
 using System.Runtime;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -23,14 +25,11 @@ namespace ServiciosEducativosComunitarios.View
     /// </summary>
     public partial class AppView : Window
     {
-        protected LocalityView localityView;
-
         protected ServicesView servicesView;
         public AppView()
         {
             InitializeComponent();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-            this.localityView = new LocalityView(this);
             this.servicesView = new ServicesView(this);
             loadCatalogues(false);
         }
@@ -41,8 +40,11 @@ namespace ServiciosEducativosComunitarios.View
             _ = LoadServicesAsync(esperar);
         }
 
-        private async Task LoadLocalitiesAsync(bool esperar)
+        private async Task LoadLocalitiesAsync(bool esperar = false)
         {
+            this.LabelLocalityWarning.Text = "";
+            this.LabelLocalityWarning.Visibility = Visibility.Collapsed;
+
             if (esperar)
             {
                 await Task.Delay(1000);
@@ -148,11 +150,6 @@ namespace ServiciosEducativosComunitarios.View
             }
         }
 
-        private void ButtonNewLocality_Click(object sender, RoutedEventArgs e)
-        {
-            this.localityView.ShowNew();
-        }
-
         private void ButtonNewService_Click(object sender, RoutedEventArgs e)
         {
             this.servicesView.ShowNew();
@@ -172,7 +169,7 @@ namespace ServiciosEducativosComunitarios.View
                 {
                     repo.Delete(localityModel);
                 });
-                _ = LoadLocalitiesAsync(false);
+                _ = LoadLocalitiesAsync();
                 MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
@@ -209,13 +206,109 @@ namespace ServiciosEducativosComunitarios.View
             }
         }
 
-        private void ButtonEditLocality_Click(object sender, RoutedEventArgs e)
+        private void ShowLocalityWarning(string message)
         {
-            Button button = (Button)sender;
+            this.LabelLocalityWarning.Text = message;
+            this.LabelLocalityWarning.Visibility = Visibility.Visible;
+            SystemSounds.Beep.Play();
+        }
 
-            if (button.DataContext is LocalityModel localityModel)
+        // Guardar (Agregar/Actualizar) localidad desde el botón "Guardar" del DataGrid.
+        private async void ButtonLocalityStore_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button)
             {
-                this.localityView.ShowEdit(localityModel);
+                return;
+            }
+
+            if (button.DataContext is not LocalityModel locality)
+            {
+                ShowLocalityWarning("Ingesa la información de la localidad");
+                return;
+            }
+
+            if (String.IsNullOrEmpty(locality.Code))
+            {
+                ShowLocalityWarning("Ingesa un código de localidad");
+                return;
+            }
+
+            string alphanumericPattern = @"^[a-zA-Z0-9]+$";
+
+            if (!Regex.IsMatch(locality.Code, alphanumericPattern))
+            {
+                ShowLocalityWarning("El formato del código no es alfanumérico");
+                return;
+            }
+
+            if (locality.Municipio == 0)
+            {
+                ShowLocalityWarning("Selecciona un municipio");
+                return;
+            }
+
+            if (String.IsNullOrEmpty(locality.Comunidad))
+            {
+                ShowLocalityWarning("Ingesa un nombre de comunidad");
+                return;
+            }
+
+            if (locality.Ambito == 0)
+            {
+                ShowLocalityWarning("Selecciona un ámbito");
+                return;
+            }
+
+            string numericPattern = @"^[+-]?\d*([.,]\d+)?$";
+
+            if (!String.IsNullOrEmpty(locality.Latitud) && !Regex.IsMatch(locality.Latitud, numericPattern))
+            {
+                ShowLocalityWarning("El formato de la latitud no es numérico");
+                return;
+            }
+
+            if (!String.IsNullOrEmpty(locality.Longitud) && !Regex.IsMatch(locality.Longitud, numericPattern))
+            {
+                ShowLocalityWarning("El formato de la longitud no es numérico");
+                return;
+            }
+
+            if (locality.Poblacion < 0)
+            {
+                ShowLocalityWarning("El campo población debe ser un número positivo");
+                return;
+            }
+
+            try
+            {
+                var repo = new LocalityRepository();
+                bool codeExists = await Task.Run(() => repo.CodeExists(locality));
+
+                if (codeExists)
+                {
+                    ShowLocalityWarning("El código de localidad ya existe. Ingresa otro.");
+                    return;
+                }
+
+                if (locality.Id == 0)
+                {
+                    // Nuevo registro
+                    await Task.Run(() => repo.Add(locality));
+                }
+                else
+                {
+                    // Registro existente
+                    await Task.Run(() => repo.Update(locality));
+                }
+
+                // Después de guardar, marcar como no modificado y refrescar catálogo
+                locality.AcceptChanges();
+                _ = LoadLocalitiesAsync();
+                MessageBox.Show("Localidad guardada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                ShowLocalityWarning($"Error al guardar la localidad: {ex.Message}");
             }
         }
 
@@ -264,11 +357,11 @@ namespace ServiciosEducativosComunitarios.View
             e.Handled = true;
 
             // Recargar catálogo para reflejar cambios
-            _ = LoadLocalitiesAsync(false);
+            _ = LoadLocalitiesAsync();
 
             if (errors.Any())
             {
-                MessageBox.Show($"No se pudo eliminar la localidad:\n{string.Join("\n", errors)}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                ShowLocalityWarning($"No se pudo eliminar la localidad: {string.Join("\n", errors)}");
             }
             else
             {

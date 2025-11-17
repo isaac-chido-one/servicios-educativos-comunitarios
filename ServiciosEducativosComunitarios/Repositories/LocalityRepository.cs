@@ -1,4 +1,5 @@
-﻿using ServiciosEducativosComunitarios.Model;
+﻿using Microsoft.Identity.Client.Platforms.Features.DesktopOs.Kerberos;
+using ServiciosEducativosComunitarios.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -22,8 +23,8 @@ namespace ServiciosEducativosComunitarios.Repositories
                 command.Parameters.AddWithValue("@Municipio", localityModel.Municipio);
                 command.Parameters.AddWithValue("@Comunidad", localityModel.Comunidad);
                 command.Parameters.AddWithValue("@Ambito", localityModel.Ambito);
-                command.Parameters.AddWithValue("@Latitud", localityModel.Latitud);
-                command.Parameters.AddWithValue("@Longitud", localityModel.Longitud);
+                command.Parameters.AddWithValue("@Latitud", (object?)localityModel.Latitud ?? DBNull.Value);
+                command.Parameters.AddWithValue("@Longitud", (object?)localityModel.Longitud ?? DBNull.Value);
                 command.Parameters.AddWithValue("@Poblacion", localityModel.Poblacion);
                 command.ExecuteNonQuery();
                 connection.Close();
@@ -90,7 +91,8 @@ namespace ServiciosEducativosComunitarios.Repositories
                             Ambito = reader.IsDBNull(4) ? 0 : reader.GetInt32(4),
                             Latitud = reader.IsDBNull(5) ? null : reader.GetString(5),
                             Longitud = reader.IsDBNull(6) ? null : reader.GetString(6),
-                            Poblacion = reader.IsDBNull(7) ? 0 : reader.GetInt32(7)
+                            Poblacion = reader.IsDBNull(7) ? 0 : reader.GetInt32(7),
+                            IsDirty = false
                         };
 
                         localities.Add(locality);
@@ -101,6 +103,23 @@ namespace ServiciosEducativosComunitarios.Repositories
             }
 
             return localities;
+        }
+
+        public bool CodeExists(LocalityModel localityModel)
+        {
+            bool exists = false;
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT * FROM  [Locality] WHERE [Id] != @id AND [Code] = @code";
+                command.Parameters.AddWithValue("@id", localityModel.Id);
+                command.Parameters.AddWithValue("@code", localityModel.Code);
+                exists = command.ExecuteScalar() != null;
+            }
+
+            return exists;
         }
     }
 }

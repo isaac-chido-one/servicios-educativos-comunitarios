@@ -20,13 +20,10 @@ namespace ServiciosEducativosComunitarios.View
     /// </summary>
     public partial class LocalityView : Window
     {
-        private readonly AppView appView;
-
         private LocalityModel? localityModel;
 
-        public LocalityView(AppView appView)
+        public LocalityView()
         {
-            this.appView = appView;
             InitializeComponent();
         }
 
@@ -50,7 +47,6 @@ namespace ServiciosEducativosComunitarios.View
         private void BtnStore_Click(object sender, RoutedEventArgs e)
         {
             this.Visibility = Visibility.Collapsed;
-            appView.loadCatalogues(true);
         }
 
         public void ShowNew()

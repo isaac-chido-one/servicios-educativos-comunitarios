@@ -15,6 +15,7 @@
 
     <Window.Resources>
         <conv:IdToNameConverter x:Key="IdToNameConverter"/>
+        <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
 
     <Border CornerRadius="10" BorderThickness="1">
@@ -223,10 +224,21 @@
                             <RowDefinition Height="11*"></RowDefinition>
                         </Grid.RowDefinitions>
 
-                        <WrapPanel Grid.Column="0" Grid.Row="0" HorizontalAlignment="Right" VerticalAlignment="Center">
-                            <Button Margin="10 0" Padding="20 10" Name="ButtonNewLocality" Click="ButtonNewLocality_Click">Nuevo</Button>
+                        <WrapPanel Grid.Column="0" Grid.Row="0" Orientation="Vertical">
+                            <TextBlock 
+                                Text="Texto de prueba"
+                                Foreground="Yellow"
+                                FontSize="12"
+                                FontWeight="Medium"
+                                Margin="0,10,0,0"
+                                TextWrapping="Wrap"
+                                Background="Red"
+                                Visibility="Hidden"
+                                Name="LabelLocalityWarning"
+                                Padding="10"
+                            ></TextBlock>
                         </WrapPanel>
-                        
+
                         <DataGrid 
                             AutoGenerateColumns="False"
                             Grid.Column="0" 
@@ -238,7 +250,7 @@
                             HorizontalAlignment="Stretch"
                         >
                             <DataGrid.Columns>
-                                <DataGridTextColumn Header="Clave" Binding="{Binding Code}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Clave" Binding="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
 
                                 <DataGridTemplateColumn Header="Municipio">
                                     <DataGridTemplateColumn.CellTemplate>
@@ -248,7 +260,7 @@
                                                 Margin="5,0,5,0"
                                                 Name="ComboMunicipio"
                                                 SelectedValuePath="Tag"
-                                                SelectedValue="{Binding Municipio, TargetNullValue=0}"
+                                                SelectedValue="{Binding Municipio, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"
                                             >
                                                 <ComboBoxItem Tag="0" Content="Seleccionar..." IsSelected="True"></ComboBoxItem>
                                                 <ComboBoxItem Tag="1" Content="Apozol"></ComboBoxItem>
@@ -314,8 +326,8 @@
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
-                                <DataGridTextColumn Header="Comunidad" Binding="{Binding Comunidad}" Width="*"></DataGridTextColumn>
-                                
+                                <DataGridTextColumn Header="Comunidad" Binding="{Binding Comunidad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
+
                                 <DataGridTemplateColumn Header="Ámbito">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
@@ -324,35 +336,30 @@
                                                 Margin="0,0,3,3" 
                                                 Name="ComboScope"
                                                 SelectedValuePath="Tag"
-                                                SelectedValue="{Binding Ambito, TargetNullValue=0}"
+                                                SelectedValue="{Binding Ambito, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"
                                             >
                                                 <ComboBoxItem Tag="0" Content="Seleccionar..."></ComboBoxItem>
                                                 <ComboBoxItem Tag="1" Content="Rural"></ComboBoxItem>
-                                                <ComboBoxItem Tag="1" Content="Urbano"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2" Content="Urbano"></ComboBoxItem>
                                             </ComboBox>
 
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
 
-                                <DataGridTextColumn Header="Latitud" Binding="{Binding Latitud}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Latitud" Binding="{Binding Latitud, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
 
-                                <DataGridTextColumn Header="Longitud" Binding="{Binding Longitud}" Width="*"></DataGridTextColumn>
+                                <DataGridTextColumn Header="Longitud" Binding="{Binding Longitud, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
 
-                                <DataGridTextColumn Header="Población" Binding="{Binding Poblacion}" Width="*"></DataGridTextColumn>
-
-                                <DataGridTemplateColumn Header="" Width="*">
-                                    <DataGridTemplateColumn.CellTemplate>
-                                        <DataTemplate>
-                                            <Button Tag="{Binding Id}" ToolTip="Guardar" Margin="3" Name="ButtonLocalityStore">Guardar</Button>
-                                        </DataTemplate>
-                                    </DataGridTemplateColumn.CellTemplate>
-                                </DataGridTemplateColumn>
+                                <DataGridTextColumn Header="Población" Binding="{Binding Poblacion, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
 
                                 <DataGridTemplateColumn Header="" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <Button Tag="{Binding Id}" ToolTip="Editar" Click="ButtonEditLocality_Click" Margin="3">Editar</Button>
+                                            <Button Tag="{Binding Id}" ToolTip="Guardar" Margin="3" Name="ButtonLocalityStore" Click="ButtonLocalityStore_Click"
+                                                    Visibility="{Binding IsDirty, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                                Guardar
+                                            </Button>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
