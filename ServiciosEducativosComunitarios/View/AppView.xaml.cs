@@ -38,10 +38,6 @@ namespace ServiciosEducativosComunitarios.View
             // Asegurar ItemsSource del grid de localidades a la colección observable
             this.DataGridLocalities.ItemsSource = this.Localities;
 
-            LoadCatalogues();
-        }
-        private void LoadCatalogues()
-        {
             // Cargar localities y servicios desde el repositorio sin bloquear la UI
             _ = LoadLocalitiesAsync();
             _ = LoadServicesAsync();
@@ -485,13 +481,13 @@ namespace ServiciosEducativosComunitarios.View
                 return;
             }
 
-            if (button.DataContext is not ServiceModel service)
+            if (button.DataContext is not ServiceModel serviceModel)
             {
                 ShowServiceWarning("Ingesa la información del servicio");
                 return;
             }
 
-            if (String.IsNullOrEmpty(service.Code))
+            if (String.IsNullOrEmpty(serviceModel.Code))
             {
                 ShowServiceWarning("Ingesa una clave de servicio");
                 return;
@@ -499,31 +495,31 @@ namespace ServiciosEducativosComunitarios.View
 
             string alphanumericPattern = @"^[a-zA-Z0-9]+$";
 
-            if (!Regex.IsMatch(service.Code, alphanumericPattern))
+            if (!Regex.IsMatch(serviceModel.Code, alphanumericPattern))
             {
                 ShowServiceWarning("El formato del código no es alfanumérico");
                 return;
             }
 
-            if (service.LocalityId == 0)
+            if (serviceModel.LocalityId == 0)
             {
                 ShowServiceWarning("Selecciona una localidad");
                 return;
             }
 
-            if (service.Period == 0)
+            if (serviceModel.Period == 0)
             {
                 ShowServiceWarning("Selecciona un periodo");
                 return;
             }
 
-            if (service.Program == 0)
+            if (serviceModel.Program == 0)
             {
                 ShowServiceWarning("Selecciona un programa");
                 return;
             }
 
-            if (service.Status == 0)
+            if (serviceModel.Status == 0)
             {
                 ShowServiceWarning("Selecciona un estatus");
                 return;
@@ -532,7 +528,7 @@ namespace ServiciosEducativosComunitarios.View
             try
             {
                 ServiceRepository repo = new ServiceRepository();
-                bool codeExists = await Task.Run(() => repo.CodeExists(service));
+                bool codeExists = await Task.Run(() => repo.CodeExists(serviceModel));
 
                 if (codeExists)
                 {
@@ -540,26 +536,35 @@ namespace ServiciosEducativosComunitarios.View
                     return;
                 }
 
-                if (service.Id == 0)
+                bool serviceExists = await Task.Run(() => repo.ServiceExists(serviceModel));
+
+                if (serviceExists)
+                {
+                    ShowServiceWarning("El servicio ya existe. Ingresa información diferente.");
+                    return;
+                }
+
+                if (serviceModel.Id == 0)
                 {
                     // Nuevo registro
-                    await Task.Run(() => repo.Add(service));
+                    await Task.Run(() => repo.Add(serviceModel));
                 }
                 else
                 {
                     // Registro existente
-                    await Task.Run(() => repo.Update(service));
+                    await Task.Run(() => repo.Update(serviceModel));
                 }
-
-                // Después de guardar, marcar como no modificado y refrescar catálogo
-                service.AcceptChanges();
-                _ = LoadServicesAsync();
-                MessageBox.Show("Servicio guardado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 ShowServiceWarning($"Error al guardar el servicio: {ex.Message}");
+                return;
             }
+
+            // Después de guardar, marcar como no modificado y refrescar catálogo
+            serviceModel.AcceptChanges();
+            _ = LoadServicesAsync();
+            MessageBox.Show("Servicio guardado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
         private void ButtonNewLocality_Click(object sender, RoutedEventArgs e)

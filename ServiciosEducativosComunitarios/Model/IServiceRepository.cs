@@ -13,5 +13,6 @@ namespace ServiciosEducativosComunitarios.Model
         public IEnumerable<ServiceModel> GetAll();
         public void Update(ServiceModel serviceModel);
         public bool CodeExists(ServiceModel serviceModel);
+        public bool ServiceExists(ServiceModel serviceModel);
     }
 }

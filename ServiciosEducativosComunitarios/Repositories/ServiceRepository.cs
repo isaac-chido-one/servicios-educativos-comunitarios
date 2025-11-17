@@ -17,12 +17,12 @@ namespace ServiciosEducativosComunitarios.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "INSERT INTO [Service] ([code], [localityId], [period], [program], [status]) VALUES(@Code, @LocalityId, @Period, @Program, @Status)";
-                command.Parameters.AddWithValue("@Code", serviceModel.Code);
-                command.Parameters.AddWithValue("@LocalityId", serviceModel.LocalityId);
-                command.Parameters.AddWithValue("@Period", serviceModel.Period);
-                command.Parameters.AddWithValue("@Program", serviceModel.Program);
-                command.Parameters.AddWithValue("@Status", serviceModel.Status);
+                command.CommandText = "INSERT INTO [Service] ([code], [localityId], [period], [program], [status]) VALUES (@code, @localityId, @period, @program, @status)";
+                command.Parameters.AddWithValue("@code", serviceModel.Code);
+                command.Parameters.AddWithValue("@localityId", serviceModel.LocalityId);
+                command.Parameters.AddWithValue("@period", serviceModel.Period);
+                command.Parameters.AddWithValue("@program", serviceModel.Program);
+                command.Parameters.AddWithValue("@status", serviceModel.Status);
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -35,8 +35,8 @@ namespace ServiciosEducativosComunitarios.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "DELETE FROM [Service] WHERE [id] = @Id";
-                command.Parameters.AddWithValue("@Id", serviceModel.Id);
+                command.CommandText = "DELETE FROM [Service] WHERE [id] = @id";
+                command.Parameters.AddWithValue("@id", serviceModel.Id);
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -49,13 +49,13 @@ namespace ServiciosEducativosComunitarios.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "UPDATE [Service] SET [code]=@Code, [localityId]=@LocalityId, [period]=@Period, [program]=@Program, [status]=@Status WHERE [id]=@Id";
-                command.Parameters.AddWithValue("@Code", serviceModel.Code);
-                command.Parameters.AddWithValue("@LocalityId", serviceModel.LocalityId);
-                command.Parameters.AddWithValue("@Period", serviceModel.Period);
-                command.Parameters.AddWithValue("@Program", serviceModel.Program);
-                command.Parameters.AddWithValue("@Status", serviceModel.Status);
-                command.Parameters.AddWithValue("@Id", serviceModel.Id);
+                command.CommandText = "UPDATE [Service] SET [code] = @code, [localityId] = @localityId, [period] = @period, [program] = @program, [status] = @status WHERE [id] = @id";
+                command.Parameters.AddWithValue("@code", serviceModel.Code);
+                command.Parameters.AddWithValue("@localityId", serviceModel.LocalityId);
+                command.Parameters.AddWithValue("@period", serviceModel.Period);
+                command.Parameters.AddWithValue("@program", serviceModel.Program);
+                command.Parameters.AddWithValue("@status", serviceModel.Status);
+                command.Parameters.AddWithValue("@id", serviceModel.Id);
                 command.ExecuteNonQuery();
                 connection.Close();
             }
@@ -106,9 +106,28 @@ namespace ServiciosEducativosComunitarios.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "SELECT TOP 1 [Id] FROM  [Service] WHERE [Id] != @id AND [Code] = @code";
+                command.CommandText = "SELECT TOP 1 [id] FROM [Service] WHERE [id] != @id AND [code] = @code";
                 command.Parameters.AddWithValue("@id", serviceModel.Id);
                 command.Parameters.AddWithValue("@code", serviceModel.Code);
+                exists = command.ExecuteScalar() != null;
+            }
+
+            return exists;
+        }
+
+        public bool ServiceExists(ServiceModel serviceModel)
+        {
+            bool exists = false;
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT TOP 1 [id] FROM [Service] WHERE [id] != @id AND [localityId] = @localityId AND [period] = @period AND [program] = @program";
+                command.Parameters.AddWithValue("@id", serviceModel.Id);
+                command.Parameters.AddWithValue("@localityId", serviceModel.LocalityId);
+                command.Parameters.AddWithValue("@period", serviceModel.Period);
+                command.Parameters.AddWithValue("@program", serviceModel.Program);
                 exists = command.ExecuteScalar() != null;
             }
 
