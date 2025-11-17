@@ -1,3 +1,5 @@
+-- Up migration
+
 CREATE TABLE [dbo].[User](
 	[Id] [uniqueidentifier] NOT NULL,
 	[Username] [nvarchar](50) NOT NULL,
@@ -43,3 +45,9 @@ INSERT INTO [dbo].[User] (
 (NEWID(), 'pduenas', '123456', 'Perla', 'Dueñas', 'pduenas@yopmail.com'),
 (NEWID(), 'hortiz' , '123456', 'Herón', 'Ortiz' , 'hortiz@yopmail.com'),
 (NEWID(), 'irojas' , '123456', 'Isaac', 'Rojas' , 'irojas@yopmail.com');
+
+
+-- Down migration
+-- DROP TABLE [dbo].[User];
+-- DROP TABLE [dbo].[Service];
+-- DROP TABLE [dbo].[Locality];

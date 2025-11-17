@@ -27,10 +27,17 @@ namespace ServiciosEducativosComunitarios.View
     /// </summary>
     public partial class AppView : Window
     {
+        // Colección observable de localidades usada por los ComboBoxes de los DataGrid
+        public ObservableCollection<LocalityModel> Localities { get; } = new ObservableCollection<LocalityModel>();
+
         public AppView()
         {
             InitializeComponent();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+
+            // Asegurar ItemsSource del grid de localidades a la colección observable
+            this.DataGridLocalities.ItemsSource = this.Localities;
+
             LoadCatalogues();
         }
         private void LoadCatalogues()
@@ -52,6 +59,28 @@ namespace ServiciosEducativosComunitarios.View
                 var localities = await Task.Run(() => repo.GetAll().ToList());
                 // Asigna el ItemsSource en el hilo de la UI
                 this.DataGridLocalities.ItemsSource = localities;
+
+                // Actualiza la colección observable en el hilo de la UI
+                this.Localities.Clear();
+
+                // placeholder con Id = 0 para mostrar "Seleccionar..." en los ComboBox
+                this.Localities.Add(new LocalityModel
+                {
+                    Id = 0,
+                    Code = "Seleccionar...",
+                    Comunidad = string.Empty,
+                    Municipio = 0,
+                    Ambito = 0,
+                    Latitud = string.Empty,
+                    Longitud = string.Empty,
+                    Poblacion = 0,
+                    IsDirty = false
+                });
+
+                foreach (var locality in localities)
+                {
+                    this.Localities.Add(locality);
+                }
             }
             catch (System.Exception ex)
             {
@@ -61,6 +90,9 @@ namespace ServiciosEducativosComunitarios.View
 
         private async Task LoadServicesAsync()
         {
+            this.LabelServiceWarning.Text = "";
+            this.LabelServiceWarning.Visibility = Visibility.Collapsed;
+
             try
             {
                 ServiceRepository repo = new ServiceRepository();
@@ -156,35 +188,57 @@ namespace ServiciosEducativosComunitarios.View
             this.DataGridServices.ItemsSource = services;
         }
 
-        private async void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
+        private async void DeleteLocality(LocalityModel localityModel)
         {
-            if (sender is not Button button || button.DataContext is not LocalityModel localityModel)
-            {
-                return;
-            }
-
             if (localityModel.Id == 0)
             {
                 List<LocalityModel> localities = (List<LocalityModel>)this.DataGridLocalities.ItemsSource;
                 localities.Remove(localityModel);
                 this.DataGridLocalities.ItemsSource = null;
                 this.DataGridLocalities.ItemsSource = localities;
+
+                // eliminar elemento temporal/pendiente de la colección observable
+                if (this.Localities.Contains(localityModel))
+                {
+                    this.Localities.Remove(localityModel);
+                }
+
                 return;
             }
 
             try
             {
-                LocalityRepository repo = new LocalityRepository();
-                await Task.Run(() => repo.Delete(localityModel));
+                LocalityRepository localityRepository = new LocalityRepository();
+                bool hasServices = await Task.Run(() => localityRepository.HasServices(localityModel));
+
+                if (hasServices)
+                {
+                    ShowLocalityWarning("No se puede eliminar la localidad debido que está asociada con algunos servicios");
+
+                    return;
+                }
+
+                await Task.Run(() => localityRepository.Delete(localityModel));
             }
             catch (Exception ex)
             {
                 ShowLocalityWarning($"Error al eliminar localidad: {ex.Message}");
+
                 return;
             }
 
             _ = LoadLocalitiesAsync();
             MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+        private void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.DataContext is not LocalityModel localityModel)
+            {
+                return;
+            }
+
+            DeleteLocality(localityModel);
         }
 
         private async void ButtonDeleteService_Click(object sender, RoutedEventArgs e)
@@ -332,7 +386,7 @@ namespace ServiciosEducativosComunitarios.View
         }
 
         // Manejador para eliminar filas con la tecla Delete en el DataGrid
-        private async void DataGridLocalities_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void DataGridLocalities_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Delete)
             {
@@ -353,49 +407,9 @@ namespace ServiciosEducativosComunitarios.View
                 return;
             }
 
-            if (localityModel.Id == 0)
-            {
-                List<LocalityModel> localities = (List<LocalityModel>)this.DataGridLocalities.ItemsSource;
-                localities.Remove(localityModel);
-                this.DataGridLocalities.ItemsSource = null;
-                this.DataGridLocalities.ItemsSource = localities;
-                e.Handled = true;
-                return;
-            }
-
-            LocalityRepository localityRepository = new LocalityRepository();
-            List<string> errors = new List<string>();
-
-            // Ejecutar en hilo de fondo las eliminaciones en BD
-            await Task.Run(() =>
-            {
-                try
-                {
-                    localityRepository.Delete(localityModel);
-                }
-                catch (System.Exception ex)
-                {
-                    lock (errors)
-                    {
-                        errors.Add($"Id {localityModel.Id}: {ex.Message}");
-                    }
-                }
-            });
-
+            DeleteLocality(localityModel);
             // Evitar que el DataGrid intente aplicar su propia lógica de borrado
             e.Handled = true;
-
-            // Recargar catálogo para reflejar cambios
-            _ = LoadLocalitiesAsync();
-
-            if (errors.Any())
-            {
-                ShowLocalityWarning($"No se pudo eliminar la localidad: {string.Join("\n", errors)}");
-            }
-            else
-            {
-                MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
         }
 
         private async void DataGridServices_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -479,7 +493,7 @@ namespace ServiciosEducativosComunitarios.View
 
             if (String.IsNullOrEmpty(service.Code))
             {
-                ShowServiceWarning("Ingesa un código de servicio");
+                ShowServiceWarning("Ingesa una clave de servicio");
                 return;
             }
 

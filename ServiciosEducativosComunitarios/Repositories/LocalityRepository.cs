@@ -45,7 +45,6 @@ namespace ServiciosEducativosComunitarios.Repositories
             }
         }
 
-
         public void Update(LocalityModel localityModel)
         {
             using (var connection = GetConnection())
@@ -113,9 +112,25 @@ namespace ServiciosEducativosComunitarios.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM  [Locality] WHERE [Id] != @id AND [Code] = @code";
+                command.CommandText = "SELECT TOP 1 [Id] FROM  [Locality] WHERE [Id] != @id AND [Code] = @code";
                 command.Parameters.AddWithValue("@id", localityModel.Id);
                 command.Parameters.AddWithValue("@code", localityModel.Code);
+                exists = command.ExecuteScalar() != null;
+            }
+
+            return exists;
+        }
+
+        public bool HasServices(LocalityModel localityModel)
+        {
+            bool exists = false;
+            using (var connection = GetConnection())
+            using (var command = new SqlCommand())
+            {
+                connection.Open();
+                command.Connection = connection;
+                command.CommandText = "SELECT TOP 1 [Id] FROM [Service] WHERE [LocalityId] = @LocalityId";
+                command.Parameters.AddWithValue("@LocalityId", localityModel.Id);
                 exists = command.ExecuteScalar() != null;
             }
 

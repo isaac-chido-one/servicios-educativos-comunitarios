@@ -12,5 +12,7 @@ namespace ServiciosEducativosComunitarios.Model
         public void Delete(LocalityModel localityModel);
         public IEnumerable<LocalityModel> GetAll();
         public void Update(LocalityModel localityModel);
+        public bool CodeExists(LocalityModel localityModel);
+        public bool HasServices(LocalityModel localityModel);
     }
 }

@@ -5,7 +5,6 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ServiciosEducativosComunitarios.View"
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
-        xmlns:conv="clr-namespace:ServiciosEducativosComunitarios.Converters"
         mc:Ignorable="d"
         Title="Servicios Educativos Comunitarios" Height="700"  Width="1300"
         WindowStartupLocation="CenterScreen"
@@ -14,7 +13,6 @@
         AllowsTransparency="True">
 
     <Window.Resources>
-        <conv:IdToNameConverter x:Key="IdToNameConverter"/>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
     </Window.Resources>
 
@@ -259,7 +257,7 @@
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Clave" Binding="{Binding Code, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
 
-                                <DataGridTemplateColumn Header="Municipio">
+                                <DataGridTemplateColumn Header="Municipio" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox 
@@ -335,7 +333,7 @@
 
                                 <DataGridTextColumn Header="Comunidad" Binding="{Binding Comunidad, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Width="*"/>
 
-                                <DataGridTemplateColumn Header="Ámbito">
+                                <DataGridTemplateColumn Header="Ámbito" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
                                             <ComboBox 
@@ -432,25 +430,91 @@
                         >
                             <DataGrid.Columns>
                                 <DataGridTextColumn Header="Clave" Binding="{Binding Code}" Width="*"></DataGridTextColumn>
-                                <DataGridTextColumn Header="Localidad" Binding="{Binding Locality}" Width="*"></DataGridTextColumn>
+
+                                <DataGridTemplateColumn Header="Localidad" Width="*">
+                                    <DataGridTemplateColumn.CellTemplate>
+                                        <DataTemplate>
+                                            <ComboBox 
+                                                VerticalAlignment="Center" 
+                                                Margin="0,0,3,3" 
+                                                Name="ComboLocality"
+                                                ItemsSource="{Binding Localities, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                SelectedValuePath="Id"
+                                                SelectedValue="{Binding LocalityId, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"
+                                            >
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock>
+                                                            <TextBlock.Text>
+                                                                <MultiBinding StringFormat="{}{0}, {1}">
+                                                                    <Binding Path="Code"/>
+                                                                    <Binding Path="Comunidad"/>
+                                                                </MultiBinding>
+                                                            </TextBlock.Text>
+                                                        </TextBlock>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                        </DataTemplate>
+                                    </DataGridTemplateColumn.CellTemplate>
+                                </DataGridTemplateColumn>
+
                                 <DataGridTemplateColumn Header="Periodo" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Period, Converter={StaticResource IdToNameConverter}, ConverterParameter=Period}"/>
+                                            <ComboBox 
+                                                VerticalAlignment="Center" 
+                                                Margin="0,0,3,3" 
+                                                Name="ComboPeriod"
+                                                SelectedValuePath="Tag"
+                                                SelectedValue="{Binding Period, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"
+                                            >
+                                                <ComboBoxItem Tag="0" Content="Seleccionar..."></ComboBoxItem>
+                                                <ComboBoxItem Tag="2028" Content="2028-2029"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2027" Content="2027-2028"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2026" Content="2026-2027"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2025" Content="2025-2026"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2024" Content="2024-2025"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2023" Content="2023-2024"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2022" Content="2022-2023"></ComboBoxItem>
+                                            </ComboBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="Programa" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Program, Converter={StaticResource IdToNameConverter}, ConverterParameter=Program}"/>
+                                            <ComboBox 
+                                                VerticalAlignment="Center" 
+                                                Margin="0,0,3,3" 
+                                                Name="ComboProgram"
+                                                SelectedValuePath="Tag"
+                                                SelectedValue="{Binding Program, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"
+                                            >
+                                                <ComboBoxItem Tag="0" Content="Seleccionar..."></ComboBoxItem>
+                                                <ComboBoxItem Tag="1" Content="Preescolar"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2" Content="Primaria"></ComboBoxItem>
+                                                <ComboBoxItem Tag="3" Content="Secundaria"></ComboBoxItem>
+                                            </ComboBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>
                                 <DataGridTemplateColumn Header="Estatus" Width="*">
                                     <DataGridTemplateColumn.CellTemplate>
                                         <DataTemplate>
-                                            <TextBlock Text="{Binding Status, Converter={StaticResource IdToNameConverter}, ConverterParameter=Status}"/>
+                                            <ComboBox 
+                                                VerticalAlignment="Center" 
+                                                Margin="0,0,3,0" 
+                                                Name="ComboStatus"
+                                                SelectedValuePath="Tag"
+                                                SelectedValue="{Binding Status, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, TargetNullValue=0}"
+                                            >
+                                                <ComboBoxItem Tag="0" Content="Seleccionar..."></ComboBoxItem>
+                                                <ComboBoxItem Tag="1" Content="Activo"></ComboBoxItem>
+                                                <ComboBoxItem Tag="2" Content="Baja"></ComboBoxItem>
+                                                <ComboBoxItem Tag="3" Content="Clausura"></ComboBoxItem>
+                                                <ComboBoxItem Tag="4" Content="Reapertura"></ComboBoxItem>
+                                            </ComboBox>
                                         </DataTemplate>
                                     </DataGridTemplateColumn.CellTemplate>
                                 </DataGridTemplateColumn>

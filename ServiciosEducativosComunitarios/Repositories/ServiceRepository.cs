@@ -106,7 +106,7 @@ namespace ServiciosEducativosComunitarios.Repositories
             {
                 connection.Open();
                 command.Connection = connection;
-                command.CommandText = "SELECT * FROM  [Service] WHERE [Id] != @id AND [Code] = @code";
+                command.CommandText = "SELECT TOP 1 [Id] FROM  [Service] WHERE [Id] != @id AND [Code] = @code";
                 command.Parameters.AddWithValue("@id", serviceModel.Id);
                 command.Parameters.AddWithValue("@code", serviceModel.Code);
                 exists = command.ExecuteScalar() != null;
