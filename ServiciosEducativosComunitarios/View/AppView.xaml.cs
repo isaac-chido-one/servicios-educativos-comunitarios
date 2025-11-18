@@ -40,7 +40,6 @@ namespace ServiciosEducativosComunitarios.View
 
             // Cargar localities y servicios desde el repositorio sin bloquear la UI
             _ = LoadLocalitiesAsync();
-            _ = LoadServicesAsync();
         }
 
         private async Task LoadLocalitiesAsync()
@@ -82,6 +81,8 @@ namespace ServiciosEducativosComunitarios.View
             {
                 ShowLocalityWarning($"Error cargando localidades: {ex.Message}");
             }
+
+            _ = LoadServicesAsync();
         }
 
         private async Task LoadServicesAsync()
@@ -186,6 +187,13 @@ namespace ServiciosEducativosComunitarios.View
 
         private async void DeleteLocality(LocalityModel localityModel)
         {
+            MessageBoxResult result = MessageBox.Show("¿Deseas eliminar la localidad?", "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                return;
+            }
+
             if (localityModel.Id == 0)
             {
                 List<LocalityModel> localities = (List<LocalityModel>)this.DataGridLocalities.ItemsSource;
@@ -227,19 +235,11 @@ namespace ServiciosEducativosComunitarios.View
             MessageBox.Show("Localidad eliminada correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
+        private async void DeleteService(ServiceModel serviceModel)
         {
-            if (sender is not Button button || button.DataContext is not LocalityModel localityModel)
-            {
-                return;
-            }
+            MessageBoxResult result = MessageBox.Show("¿Deseas eliminar el servicio?", "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
-            DeleteLocality(localityModel);
-        }
-
-        private async void ButtonDeleteService_Click(object sender, RoutedEventArgs e)
-        {
-            if (sender is not Button button || button.DataContext is not ServiceModel serviceModel)
+            if (result != MessageBoxResult.Yes)
             {
                 return;
             }
@@ -255,17 +255,39 @@ namespace ServiciosEducativosComunitarios.View
 
             try
             {
-                ServiceRepository repo = new ServiceRepository();
-                await Task.Run(() => repo.Delete(serviceModel));
+                ServiceRepository serviceRepository = new ServiceRepository();
+                await Task.Run(() => serviceRepository.Delete(serviceModel));
             }
             catch (Exception ex)
             {
                 ShowServiceWarning($"Error al eliminar servicio: {ex.Message}");
+
                 return;
             }
 
             _ = LoadServicesAsync();
             MessageBox.Show("Servicio eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+
+
+        private void ButtonDeleteLocality_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.DataContext is not LocalityModel localityModel)
+            {
+                return;
+            }
+
+            DeleteLocality(localityModel);
+        }
+
+        private void ButtonDeleteService_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is not Button button || button.DataContext is not ServiceModel serviceModel)
+            {
+                return;
+            }
+
+            DeleteService(serviceModel);
         }
 
         private void ShowLocalityWarning(string message)
@@ -397,18 +419,16 @@ namespace ServiciosEducativosComunitarios.View
 
             LocalityModel? localityModel = selected.OfType<LocalityModel>().First();
 
-            if (localityModel == null)
+            if (localityModel != null)
             {
-                e.Handled = true;
-                return;
+                DeleteLocality(localityModel);
             }
 
-            DeleteLocality(localityModel);
             // Evitar que el DataGrid intente aplicar su propia lógica de borrado
             e.Handled = true;
         }
 
-        private async void DataGridServices_PreviewKeyDown(object sender, KeyEventArgs e)
+        private void DataGridServices_PreviewKeyDown(object sender, KeyEventArgs e)
         {
             if (e.Key != Key.Delete)
             {
@@ -423,55 +443,13 @@ namespace ServiciosEducativosComunitarios.View
 
             ServiceModel? serviceModel = selected.OfType<ServiceModel>().First();
 
-            if (serviceModel == null)
+            if (serviceModel != null)
             {
-                e.Handled = true;
-                return;
+                DeleteService(serviceModel);
             }
-
-            if (serviceModel.Id == 0)
-            {
-                List<ServiceModel> services = (List<ServiceModel>)this.DataGridServices.ItemsSource;
-                services.Remove(serviceModel);
-                this.DataGridServices.ItemsSource = null;
-                this.DataGridServices.ItemsSource = services;
-                e.Handled = true;
-                return;
-            }
-
-            ServiceRepository serviceRepository = new ServiceRepository();
-            List<string> errors = new List<string>();
-
-            // Ejecutar en hilo de fondo las eliminaciones en BD
-            await Task.Run(() =>
-            {
-                try
-                {
-                    serviceRepository.Delete(serviceModel);
-                }
-                catch (System.Exception ex)
-                {
-                    lock (errors)
-                    {
-                        errors.Add($"Id {serviceModel.Id}: {ex.Message}");
-                    }
-                }
-            });
 
             // Evitar que el DataGrid intente aplicar su propia lógica de borrado
             e.Handled = true;
-
-            // Recargar catálogo para reflejar cambios
-            _ = LoadServicesAsync();
-
-            if (errors.Any())
-            {
-                ShowServiceWarning($"No se pudo eliminar el servicio: {string.Join("\n", errors)}");
-            }
-            else
-            {
-                MessageBox.Show("Servicio eliminado correctamente.", "Éxito", MessageBoxButton.OK, MessageBoxImage.Information);
-            }
         }
 
         private async void ButtonServiceStore_Click(object sender, RoutedEventArgs e)
